@@ -14,20 +14,20 @@ efficient Internet. We collect here articles about the subject.
 
 
 -   [The Mesh Question](
-    {filename}/articles/freedomlayer/mesh_question/mesh_question.mdown)
+    research/mesh_question)
 
 
 ### Distributed Hash Tables
 
 
 -   [Intro to Distributed Hash Tables](
-    {filename}/articles/freedomlayer/dht_intro/dht_intro.mdown)
+    research/dht_intro)
 
 -   [Stabilizing Chord](
-    {filename}/articles/freedomlayer/chord_stabilize/chord_stabilize.mdown)
+    research/chord_stabilize)
 
 -   [Basic DHT Security Concepts](
-    {filename}/articles/freedomlayer/dht_basic_security/dht_basic_security.mdown)
+    research/dht_basic_security)
 
 
 ### Mesh Routing

@@ -1,6 +1,8 @@
-Title: Intro to Distributed Hash Tables (DHTs)
-Date: 2014-11-11 13:07
-Author: real
++++
+title = "Intro to Distributed Hash Tables (DHTs)"
+description = ""
+date = 2014-11-11
++++
 
 <!--
 ceil and floor latex macros:
@@ -62,7 +64,7 @@ the list.
 (In our list, it means that Georgine keeps the phone number of Benito).
 
 ![The phone list drawn as a ring, with lines representing the connection between
-people on the list.]({filename}images/linear_dht_circle.svg)
+people on the list.](linear_dht_circle.svg)
 
 The phone list drawn as a ring, with lines representing the connection between
 people on the list.
@@ -112,7 +114,7 @@ Of course that in the new setting, Edwin for example now has to remember only
 Gary's phone. He shouldn't keep remembering Georgine's phone number, because
 it is not needed anymore.
 
-![The new state of the list, after Gary has joined]({filename}images/join_linear_dht_circle.svg)
+![The new state of the list, after Gary has joined](join_linear_dht_circle.svg)
 
 The new state of the list, after Gary has joined.
 
@@ -182,7 +184,7 @@ with this method.
 Maybe if we choose to remember only specific people on the list in some special
 way, we could get better results.
 
-![The list with $k=2$. Search operation is twice as fast.]({filename}images/double_linear_dht_circle.svg)
+![The list with $k=2$. Search operation is twice as fast.](double_linear_dht_circle.svg)
 
 The list with $k=2$. Search operation is twice as fast.
 
@@ -340,7 +342,7 @@ $\cdots$
 The notation $\left\lceil{y}\right\rceil$ means the first node
 that his name is bigger than $y$.
 
-![log wiring]({filename}images/log_wiring.svg)
+![log wiring](log_wiring.svg)
 
 In the picture: The ring represents the set $B_s$ of possible names for
 nodes. (With $s = 6$). Blue points are existing nodes. Their location on the ring represents
@@ -378,7 +380,7 @@ $x$ will keep going, until he eventually finds $y$. We should analyze this
 algorithm to make sure that indeed $x$ eventually finds $y$, and also how
 many iterations it takes to find $y$.
 
-![x searches y]({filename}images/x_search_y.svg)
+![x searches y](x_search_y.svg)
 
 Illustrated search process
 
@@ -487,7 +489,7 @@ We could let node $\floor{k}$ keep the value of key $k$,
 where $\floor{k}$ is the "last" node (clockwise) that has
 a name not bigger than the number $k$.
 
-![responsible keys]({filename}images/responsible_keys.svg)
+![responsible keys](responsible_keys.svg)
 
 In the picture: The node $z$ (A blue dot), and some keys that $z$ is
 responsible to keep (Small orange dots). The keys and node names are of the

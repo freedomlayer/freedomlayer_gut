@@ -1,6 +1,8 @@
-Title: The Mesh Question
-Date: 2014-11-09 18:31
-Author: real
++++
+title = "The Mesh Question"
+description = ""
+date = 2014-11-09
++++
 
 
 <h3>Abstract</h3>
@@ -121,7 +123,7 @@ another random node $B$ on the network, given that $A$ knows the address of
 $B$. (How $A$ knows $B$'s address from the first place is another
 question that we are going to deal with later, don't worry about it now).
 
-![a_to_b]({filename}images/a_to_b.svg)
+![a_to_b](a_to_b.svg)
 
 A generic schema of a mesh network. We want to send a message from $A$ to
 $B$.

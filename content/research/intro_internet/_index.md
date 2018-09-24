@@ -49,7 +49,7 @@ level routers in the end are sometimes called ISPs, or internet service
 providers.
 
 
-![A very simplistic view of the internet]({filename}images/internet_scheme.svg)
+![A very simplistic view of the internet](internet_scheme.svg)
 
 A Very simplistic view of the internet
 
@@ -159,7 +159,7 @@ Going back to the digital world, a NAT looks like a small box. You connect all
 your computers to the NAT, and then you connect your NAT to the ISP. We say
 that the computers in the internal part of the NAT are "behind the NAT".
 
-![A picture of a Cisco router. It probably has the NAT abilities.]({filename}images/cisco_router.png)
+![A picture of a Cisco router. It probably has the NAT abilities.](cisco_router.png)
 
 A picture of a Cisco router. It probably has the NAT abilities.
 
@@ -179,7 +179,7 @@ NAT receives a message, it checks if it is destined to one of the computers
 behind the NAT. If it is, the NAT can forward the message to the apropriate
 computer.
 
-![A general sketch of the network behind a NAT, and the external Internet]({filename}images/nat_scheme.svg)
+![A general sketch of the network behind a NAT, and the external Internet](nat_scheme.svg)
 
 A general sketch of the network behind a NAT, and the external Internet
 
@@ -232,36 +232,39 @@ NAT.
 You can check it on your own computer.
 On a windows box, enter at the command line:
 
-    :::bash
-    ipconfig
+```bash
+ipconfig
+```
 
 On a Linux box, enter at the terminal:
 
-    :::bash
-    ifconfig
+```bash
+ifconfig
+```
 
 
 Here is the output on my linux computer:
 
-    :::bash
-    [real@freedom:~]$ ifconfig
-    eth0      Link encap:Ethernet  HWaddr f4:6d:04:0e:8b:89  
-              inet addr:10.0.0.9  Bcast:10.0.0.255  Mask:255.255.255.0
-              inet6 addr: fe80::f66d:4ff:fe0e:8b89/64 Scope:Link
-              UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-              RX packets:7838193 errors:0 dropped:0 overruns:0 frame:0
-              TX packets:5607954 errors:0 dropped:0 overruns:0 carrier:0
-              collisions:0 txqueuelen:1000 
-              RX bytes:9336295938 (9.3 GB)  TX bytes:850374026 (850.3 MB)
+```bash
+[real@freedom:~]$ ifconfig
+eth0      Link encap:Ethernet  HWaddr f4:6d:04:0e:8b:89  
+          inet addr:10.0.0.9  Bcast:10.0.0.255  Mask:255.255.255.0
+          inet6 addr: fe80::f66d:4ff:fe0e:8b89/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:7838193 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:5607954 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:9336295938 (9.3 GB)  TX bytes:850374026 (850.3 MB)
 
-    lo        Link encap:Local Loopback  
-              inet addr:127.0.0.1  Mask:255.0.0.0
-              inet6 addr: ::1/128 Scope:Host
-              UP LOOPBACK RUNNING  MTU:65536  Metric:1
-              RX packets:214589 errors:0 dropped:0 overruns:0 frame:0
-              TX packets:214589 errors:0 dropped:0 overruns:0 carrier:0
-              collisions:0 txqueuelen:0 
-              RX bytes:23187729 (23.1 MB)  TX bytes:23187729 (23.1 MB)
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:214589 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:214589 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:23187729 (23.1 MB)  TX bytes:23187729 (23.1 MB)
+```
 
 As you can see, my address is 10.0.0.9. This is an internal address given to my
 computer by the NAT. My computer doesn't really know how to introduce himself
