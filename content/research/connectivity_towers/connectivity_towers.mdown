@@ -1,0 +1,560 @@
+Title: The connectivity of sqrt(n) towers
+Date: 2017-08-01 17:32
+Author: real
+
+## Abstract
+
+Suppose $G$ is a connected graph of $n$ vertices. Let $k > 0$ be some
+integer, and let $T_i \subseteq V(G)$ be a set of vertices, for $0 \leq i < k$.
+We say that $T_i$ is the set of "towers" of color $i$.
+
+For every vertex $v \in V(G)$ we denote by $t_i(v)$ the tower $x$ of color $i$
+that is closest to $v$ in the graph. (If there is a tie between a few
+candidates, we break it by picking the tower of color $i$ with lowest id).
+
+Denote the set $T = \cup_{i}{T_i}$ of all the towers. We now define a new
+directed graph $Q$ with $V(Q) = T$, the set of all towers. For two towers $u, v
+\in V(Q)$, $(u,v) \in E(Q)$ if and only if $t_i(u) = v$ for some $0 \leq i < k$.
+
+We want to know in which cases $Q$ is a [strongly
+connected](https://en.wikipedia.org/wiki/Strongly_connected_component) or weakly
+connected (Connected as an undirected graph). In other words, we want to know
+whether the connections towers form a connected graph.
+
+Our experiments show that for $k \geq \log_{2}{n}$ the resulting overlay graph $Q$
+is probably weakly connected, but not necessarily strongly connected. 
+
+The experiments are written in [Rust](https://www.rust-lang.org) and could be
+found [here
+[github]](https://github.com/realcr/freedomlayer_code/tree/master/connectivity_towers).
+
+## Motivation
+
+Suppose that we are given a large network $G$. Every node is connected directly
+to a few other nodes, and because of the large size of the network, no node can
+perceive the full structure of the network. We want to be able to route
+messages in this network between any pair of nodes.
+
+Our method to do this is by choosing a random set of about $\sqrt{n}$ nodes,
+called the "towers". Every tower out of the $\sqrt{n}$ towers has some color
+$c$, where $0 \leq c < k$.
+
+Every node keeps contact with the closest tower of color $c$ for $0 \leq c <
+k$. This amounts to a total of $c$ towers. Whenever a node $x$ wants to send a
+message to a remote node $y$ in the network, $x$ sends the message to one of the
+close towers he keeps contact with. The towers then route the message all the
+way to one of the towers that keep contact with $y$, and finally that tower
+passes the message to $y$.
+
+For this scheme to work, we have to make sure that the towers know how to route
+messages between every two towers. Every node maintains contact with $k$
+different towers, and this is also true for tower nodes. We use those
+connections as an overlay graph between the towers. In this overlay directed
+graph, every tower is connected to $k-1$ other towers and has a self edge
+himself. The self edge happens because a tower $x_c$ of color $c$ has
+$t_c(x_c) = x_c$.
+
+![Overlay directed graph of towers]({filename}images/towers_and_nodes.svg)
+> In the picture: The overlay directed graph between the towers (Self edges are
+> omitted). Note that the graph is connected, but not strongly connected. 
+> The black small dots represent regular nodes. For example: To route a message
+> from the node $x$ to the node $y$, the message has to pass between various
+> towers along the way.
+
+**If we can assume that the overlay directed graph between towers is somehow
+connected**, we should be able to manage routing between the towers. As a simple
+solution, as there are only $\sqrt{n}$ towers, this could be done by letting
+every tower remember a shortest path to every other tower.
+
+Note that in this setting a tower does more work than a usual node. A tower has
+to remember shortest path to other $\sqrt{n}$ towers, and in addition maintain
+contact with $\sqrt{n}$ nodes around him. This is not a fully decentralized
+setting, but we believe that the work that a tower does should be manageable
+and some might choose to do it for the right compensation.
+
+In this document we try to evaluate which parameters for this
+structure of towers (Amount of towers and amount of colors) we should use to
+make sure that the resulting overlay directed graph between towers is
+connected.
+
+
+## Experiment
+
+We experiment as follows: We generate different types of networks of different sizes.
+For a network of size $n$ nodes we pick $k = 2\cdot\log_{2}{n}$ different
+colors. For each color we pick $\sqrt{n} / k$ different towers (Towers of
+different color may overlap). This is the code that picks the towers (written
+in [Rust](https://www.rust-lang.org)):
+
+```rust
+/// Choose nodes to be towers. We pick num_towers towers of every color. There are num_colors
+/// different tower colors.
+pub fn choose_towers<Node: Hash + Eq + Clone, R: Rng>(net: &Network<Node>, 
+                  num_towers: usize, num_colors: usize, rng: &mut R) -> Vec<Vec<usize>> {
+
+    let mut chosen_towers: Vec<Vec<usize>> = Vec::new();
+
+    for _ in 0 .. num_colors {
+        // Pick random towers for a certain color:
+        let mut ctowers = choose_k_nums(num_towers, net.igraph.node_count(), rng)
+            .into_iter()
+            .collect::<Vec<usize>>();
+        // Sort for determinism:
+        ctowers.sort();
+        chosen_towers.push(ctowers);
+    }
+    chosen_towers
+}
+```
+
+Then we calculate iteratively for every node $v$ in the network the closest
+tower of color $c$ for $0 \leq c < k$. This is how one iteration looks like:
+
+```rust
+/// Perform one iteration of calculating towers info.
+/// Return whether any changed happen during this iteration.
+fn iter_towers_info<Node: Hash + Eq + Clone>(net: &Network<Node>,
+                 chosen_towers: &Vec<Vec<usize>>,
+                 towers_info: &mut Vec<Vec<Option<LocalTowerInfo>>>) -> bool {
+
+    let mut changed = false;
+
+    for node in net.igraph.nodes() {
+        for nei in net.igraph.neighbors(node) {
+            for tower_color in 0 .. chosen_towers.len() {
+                if towers_info[node][tower_color].is_none() {
+                    continue
+                }
+                // This is the candidate LocalTowerInfo for nei:
+                let mut candidate_info = towers_info[node][tower_color].clone().unwrap();
+                candidate_info.distance += 1;
+                candidate_info.gateway = node;
+                // Current nei's LocalTowerInfo:
+
+                if towers_info[nei][tower_color].is_none() {
+                    changed = true;
+                    towers_info[nei][tower_color] = Some(candidate_info);
+                    continue
+                }
+
+                let nei_info = towers_info[nei][tower_color].clone().unwrap();
+
+                if (candidate_info.distance,
+                    candidate_info.gateway,
+                    candidate_info.tower_node) <
+                   (nei_info.distance,
+                    nei_info.gateway,
+                    nei_info.tower_node) {
+
+                    changed = true;
+                    towers_info[nei][tower_color] = Some(candidate_info);
+
+                }
+            }
+        }
+    }
+    changed
+}
+```
+
+Finally, we create a directed overlay graph of the towers and check its
+connectivity. We check two types of connectivity for the overlay graph: weak
+connectivity and strong connectivity. Weak connectivity is checked using
+[dfs](https://en.wikipedia.org/wiki/Depth-first_search), and strong
+connectivity is checked using [kosaraju
+algorithm](https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm) for finding
+strongly connected components. Both of those algorithms were taken from the
+[petgraph](https://github.com/bluss/petgraph) rust crate.
+
+
+This is the code that checks connectivity:
+
+```rust
+/// Check if overlay directed graph of towers is connected.
+/// Returns (connected, strongly_connected)
+pub fn is_connected(chosen_towers: &Vec<Vec<usize>>, 
+        towers_info: &Vec<Vec<Option<LocalTowerInfo>>>) -> (bool, bool) {
+
+    // An overlay directed graph of the towers in the network
+    // and the connections between them.
+    // A tower T is connected to a tower T' if T' is the closest tower to T of some color.
+    let mut towers_graph: graphmap::DiGraphMap<usize,()> = 
+        graphmap::DiGraphMap::new();
+
+    // Add towers as nodes to the graph:
+    for tower_color in 0 .. chosen_towers.len() {
+        for tower_index in 0 .. chosen_towers[tower_color].len() {
+            towers_graph.add_node(chosen_towers[tower_color][tower_index]);
+        }
+    }
+
+    // For every tower, add all connections to closest local towers as nodes.
+    let graph_nodes = towers_graph.nodes().collect::<Vec<usize>>();
+    for tower_node in graph_nodes {
+        for tower_color in 0 .. chosen_towers.len() {
+            towers_graph.add_edge(tower_node, 
+                  towers_info[tower_node][tower_color].clone().unwrap().tower_node,());
+        }
+    }
+
+    let sconnected_comps = kosaraju_scc(&towers_graph);
+    (connected_components(&towers_graph) == 1, sconnected_comps.len() == 1)
+}
+```
+
+The experiment is done for 5 different types of networks:
+
+- rand: An approximated random $G(n,p)$ network with $p = 1.5\log(n)/n$
+- 2d: a two dimensional grid.
+- rand + 2d: A sum of rand and 2d networks.
+- planar: We randomize nodes as points in a large plane. Every point is
+    connected to the closest $1.5\log(n)$ points [ref] The main bottleneck for
+    this implementation is the generation of the `planar` type network. It is
+    currently done in $O(n^2)$, which takes a long time. [/ref].
+- tree: A tree network.
+
+Experiment results ($k = 2\log_{2}{n}$)
+
+```
+$ cargo run --bin towers_scc --release | tee ../results/towers_scc_g_2_weakly_2017_07_26.txt
+   Compiling net_coords v0.1.0 (file:///home/real/projects/d/freedomlayer/freedomlayer_research/network_coords/net_coords)
+    Finished release [optimized] target(s) in 3.30 secs
+     Running `target/release/towers_scc`
+Checking if local towers overlay graph is strongly connected
+
+g= 6; rand    ; ni=0 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; rand    ; ni=1 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; 2d      ; ni=0 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; 2d      ; ni=1 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; rand+2d ; ni=0 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; rand+2d ; ni=1 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; planar  ; ni=0 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; planar  ; ni=1 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; tree    ; ni=0 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+g= 6; tree    ; ni=1 |num_colors =    12 |num_towers =     1 | connected = V| sconnected = V
+
+g= 7; rand    ; ni=0 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; rand    ; ni=1 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; 2d      ; ni=0 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; 2d      ; ni=1 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; rand+2d ; ni=0 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; rand+2d ; ni=1 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; planar  ; ni=0 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; planar  ; ni=1 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; tree    ; ni=0 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+g= 7; tree    ; ni=1 |num_colors =    14 |num_towers =     1 | connected = V| sconnected = V
+
+g= 8; rand    ; ni=0 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; rand    ; ni=1 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; 2d      ; ni=0 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; 2d      ; ni=1 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; rand+2d ; ni=0 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; rand+2d ; ni=1 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; planar  ; ni=0 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; planar  ; ni=1 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; tree    ; ni=0 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = V
+g= 8; tree    ; ni=1 |num_colors =    16 |num_towers =     2 | connected = V| sconnected = X
+
+g= 9; rand    ; ni=0 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; rand    ; ni=1 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; 2d      ; ni=0 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; 2d      ; ni=1 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; rand+2d ; ni=0 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; rand+2d ; ni=1 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; planar  ; ni=0 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; planar  ; ni=1 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; tree    ; ni=0 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = V
+g= 9; tree    ; ni=1 |num_colors =    18 |num_towers =     2 | connected = V| sconnected = X
+
+g=10; rand    ; ni=0 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; rand    ; ni=1 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; 2d      ; ni=0 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; 2d      ; ni=1 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; rand+2d ; ni=0 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; rand+2d ; ni=1 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; planar  ; ni=0 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; planar  ; ni=1 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+g=10; tree    ; ni=0 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = X
+g=10; tree    ; ni=1 |num_colors =    20 |num_towers =     2 | connected = V| sconnected = V
+
+g=11; rand    ; ni=0 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; rand    ; ni=1 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; 2d      ; ni=0 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; 2d      ; ni=1 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; rand+2d ; ni=0 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; rand+2d ; ni=1 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; planar  ; ni=0 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; planar  ; ni=1 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = V
+g=11; tree    ; ni=0 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = X
+g=11; tree    ; ni=1 |num_colors =    22 |num_towers =     3 | connected = V| sconnected = X
+
+g=12; rand    ; ni=0 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; rand    ; ni=1 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; 2d      ; ni=0 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; 2d      ; ni=1 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; rand+2d ; ni=0 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; rand+2d ; ni=1 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; planar  ; ni=0 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; planar  ; ni=1 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; tree    ; ni=0 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = V
+g=12; tree    ; ni=1 |num_colors =    24 |num_towers =     3 | connected = V| sconnected = X
+
+g=13; rand    ; ni=0 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; rand    ; ni=1 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; 2d      ; ni=0 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; 2d      ; ni=1 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; rand+2d ; ni=0 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; rand+2d ; ni=1 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; planar  ; ni=0 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; planar  ; ni=1 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = V
+g=13; tree    ; ni=0 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = X
+g=13; tree    ; ni=1 |num_colors =    26 |num_towers =     4 | connected = V| sconnected = X
+
+g=14; rand    ; ni=0 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; rand    ; ni=1 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; 2d      ; ni=0 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; 2d      ; ni=1 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; rand+2d ; ni=0 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; rand+2d ; ni=1 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; planar  ; ni=0 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; planar  ; ni=1 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = V
+g=14; tree    ; ni=0 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = X
+g=14; tree    ; ni=1 |num_colors =    28 |num_towers =     5 | connected = V| sconnected = X
+
+g=15; rand    ; ni=0 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; rand    ; ni=1 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; 2d      ; ni=0 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; 2d      ; ni=1 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; rand+2d ; ni=0 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; rand+2d ; ni=1 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; planar  ; ni=0 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; planar  ; ni=1 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = V
+g=15; tree    ; ni=0 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = X
+g=15; tree    ; ni=1 |num_colors =    30 |num_towers =     7 | connected = V| sconnected = X
+
+g=16; rand    ; ni=0 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; rand    ; ni=1 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; 2d      ; ni=0 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; 2d      ; ni=1 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; rand+2d ; ni=0 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; rand+2d ; ni=1 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; planar  ; ni=0 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = V
+g=16; planar  ; ni=1 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = X
+g=16; tree    ; ni=0 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = X
+g=16; tree    ; ni=1 |num_colors =    32 |num_towers =     9 | connected = V| sconnected = X
+
+g=17; rand    ; ni=0 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = V
+g=17; rand    ; ni=1 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = V
+g=17; 2d      ; ni=0 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = X
+g=17; 2d      ; ni=1 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = X
+g=17; rand+2d ; ni=0 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = V
+g=17; rand+2d ; ni=1 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = V
+g=17; planar  ; ni=0 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = V
+g=17; planar  ; ni=1 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = X
+g=17; tree    ; ni=0 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = X
+g=17; tree    ; ni=1 |num_colors =    34 |num_towers =    11 | connected = V| sconnected = X
+
+g=18; rand    ; ni=0 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; rand    ; ni=1 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; 2d      ; ni=0 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = X
+g=18; 2d      ; ni=1 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; rand+2d ; ni=0 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; rand+2d ; ni=1 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; planar  ; ni=0 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; planar  ; ni=1 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = V
+g=18; tree    ; ni=0 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = X
+g=18; tree    ; ni=1 |num_colors =    36 |num_towers =    15 | connected = V| sconnected = X
+
+g=19; rand    ; ni=0 |num_colors =    38 |num_towers =    20 | connected = V| sconnected = V
+g=19; rand    ; ni=1 |num_colors =    38 |num_towers =    20 | connected = V| sconnected = V
+g=19; 2d      ; ni=0 |num_colors =    38 |num_towers =    20 | connected = V| sconnected = V
+g=19; 2d      ; ni=1 |num_colors =    38 |num_towers =    20 | connected = V| sconnected = V
+g=19; rand+2d ; ni=0 |num_colors =    38 |num_towers =    20 | connected = V| sconnected = V
+g=19; rand+2d ; ni=1 |num_colors =    38 |num_towers =    20 | connected = V| sconnected = V
+```
+
+About the results table: $g$ means log in base 2 of $n$. In other words, $n
+\approx 2^g$. `ni` means network iteration (We do two iterations for every
+specific network type and network size). `num_colors` means the amount of
+colors we have for towers. `num_towers` is the amount of towers we have of
+every color. `connected` and `sconnected` indicate whether the resulting
+overlay directed graph of towers is weakly connected or strongly connected
+respectively. `V` means yes, `X` means no. Note that if the overlay directed
+graph is strongly connected, it must be also weakly connected. This means that
+if we see a `V` in the last column, we must also see a `V` in the preceding
+column.
+
+We can see in the results that the resulting overlay directed graph of towers
+is not always strongly connected, but it seems to be weakly connected in all of
+the examples we have checked. Similar results apply for the choice of
+$k = \log_{2}{n}$ (The overlay directed graph of towers seems to be weakly
+connected, but not strongly connected). For $k = 0.5\log_{2}{n}$ the
+overlay directed graph of towers is sometimes not weakly connected.
+
+The following are the results for $k = \log_{2}{n}$:
+
+```
+$ cargo run --bin towers_scc --release
+   Compiling net_coords v0.1.0 (file:///home/real/projects/d/freedomlayer/freedomlayer_research/network_coords/net_coords)
+    Finished release [optimized] target(s) in 3.34 secs
+     Running `target/release/towers_scc`
+Checking if local towers overlay graph is strongly connected
+
+g= 6; rand    ; ni=0 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; rand    ; ni=1 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; 2d      ; ni=0 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; 2d      ; ni=1 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; rand+2d ; ni=0 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; rand+2d ; ni=1 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; tree    ; ni=0 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = V
+g= 6; tree    ; ni=1 |num_colors =     6 |num_towers =     2 | connected = V | sconnected = X
+
+g= 7; rand    ; ni=0 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; rand    ; ni=1 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; 2d      ; ni=0 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; 2d      ; ni=1 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; rand+2d ; ni=0 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; rand+2d ; ni=1 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; tree    ; ni=0 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = V
+g= 7; tree    ; ni=1 |num_colors =     7 |num_towers =     2 | connected = V | sconnected = X
+
+g= 8; rand    ; ni=0 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = V
+g= 8; rand    ; ni=1 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = V
+g= 8; 2d      ; ni=0 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = X
+g= 8; 2d      ; ni=1 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = V
+g= 8; rand+2d ; ni=0 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = V
+g= 8; rand+2d ; ni=1 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = V
+g= 8; tree    ; ni=0 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = X
+g= 8; tree    ; ni=1 |num_colors =     8 |num_towers =     3 | connected = V | sconnected = X
+
+g= 9; rand    ; ni=0 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = V
+g= 9; rand    ; ni=1 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = V
+g= 9; 2d      ; ni=0 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = X
+g= 9; 2d      ; ni=1 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = V
+g= 9; rand+2d ; ni=0 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = V
+g= 9; rand+2d ; ni=1 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = V
+g= 9; tree    ; ni=0 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = X
+g= 9; tree    ; ni=1 |num_colors =     9 |num_towers =     3 | connected = V | sconnected = X
+
+g=10; rand    ; ni=0 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = V
+g=10; rand    ; ni=1 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = V
+g=10; 2d      ; ni=0 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = X
+g=10; 2d      ; ni=1 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = X
+g=10; rand+2d ; ni=0 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = V
+g=10; rand+2d ; ni=1 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = V
+g=10; tree    ; ni=0 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = X
+g=10; tree    ; ni=1 |num_colors =    10 |num_towers =     4 | connected = V | sconnected = X
+
+g=11; rand    ; ni=0 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = V
+g=11; rand    ; ni=1 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = V
+g=11; 2d      ; ni=0 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = X
+g=11; 2d      ; ni=1 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = V
+g=11; rand+2d ; ni=0 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = V
+g=11; rand+2d ; ni=1 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = V
+g=11; tree    ; ni=0 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = X
+g=11; tree    ; ni=1 |num_colors =    11 |num_towers =     5 | connected = V | sconnected = X
+
+g=12; rand    ; ni=0 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = V
+g=12; rand    ; ni=1 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = V
+g=12; 2d      ; ni=0 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = V
+g=12; 2d      ; ni=1 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = X
+g=12; rand+2d ; ni=0 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = V
+g=12; rand+2d ; ni=1 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = V
+g=12; tree    ; ni=0 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = X
+g=12; tree    ; ni=1 |num_colors =    12 |num_towers =     6 | connected = V | sconnected = X
+
+g=13; rand    ; ni=0 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = V
+g=13; rand    ; ni=1 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = V
+g=13; 2d      ; ni=0 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = X
+g=13; 2d      ; ni=1 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = X
+g=13; rand+2d ; ni=0 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = V
+g=13; rand+2d ; ni=1 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = V
+g=13; tree    ; ni=0 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = X
+g=13; tree    ; ni=1 |num_colors =    13 |num_towers =     7 | connected = V | sconnected = X
+
+g=14; rand    ; ni=0 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = V
+g=14; rand    ; ni=1 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = V
+g=14; 2d      ; ni=0 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = V
+g=14; 2d      ; ni=1 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = V
+g=14; rand+2d ; ni=0 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = V
+g=14; rand+2d ; ni=1 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = V
+g=14; tree    ; ni=0 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = X
+g=14; tree    ; ni=1 |num_colors =    14 |num_towers =    10 | connected = V | sconnected = X
+
+g=15; rand    ; ni=0 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = V
+g=15; rand    ; ni=1 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = V
+g=15; 2d      ; ni=0 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = V
+g=15; 2d      ; ni=1 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = X
+g=15; rand+2d ; ni=0 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = V
+g=15; rand+2d ; ni=1 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = V
+g=15; tree    ; ni=0 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = X
+g=15; tree    ; ni=1 |num_colors =    15 |num_towers =    13 | connected = V | sconnected = X
+
+g=16; rand    ; ni=0 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = V
+g=16; rand    ; ni=1 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = V
+g=16; 2d      ; ni=0 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = X
+g=16; 2d      ; ni=1 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = V
+g=16; rand+2d ; ni=0 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = V
+g=16; rand+2d ; ni=1 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = V
+g=16; tree    ; ni=0 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = X
+g=16; tree    ; ni=1 |num_colors =    16 |num_towers =    17 | connected = V | sconnected = X
+
+g=17; rand    ; ni=0 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = V
+g=17; rand    ; ni=1 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = V
+g=17; 2d      ; ni=0 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = X
+g=17; 2d      ; ni=1 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = X
+g=17; rand+2d ; ni=0 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = V
+g=17; rand+2d ; ni=1 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = V
+g=17; tree    ; ni=0 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = X
+g=17; tree    ; ni=1 |num_colors =    17 |num_towers =    22 | connected = V | sconnected = X
+
+g=18; rand    ; ni=0 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = V
+g=18; rand    ; ni=1 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = V
+g=18; 2d      ; ni=0 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = X
+g=18; 2d      ; ni=1 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = V
+g=18; rand+2d ; ni=0 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = V
+g=18; rand+2d ; ni=1 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = V
+g=18; tree    ; ni=0 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = X
+g=18; tree    ; ni=1 |num_colors =    18 |num_towers =    29 | connected = V | sconnected = X
+
+g=19; rand    ; ni=0 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = V
+g=19; rand    ; ni=1 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = V
+g=19; 2d      ; ni=0 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = X
+g=19; 2d      ; ni=1 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = V
+g=19; rand+2d ; ni=0 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = V
+g=19; rand+2d ; ni=1 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = V
+g=19; tree    ; ni=0 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = X
+g=19; tree    ; ni=1 |num_colors =    19 |num_towers =    39 | connected = V | sconnected = X
+
+g=20; rand    ; ni=0 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = V
+g=20; rand    ; ni=1 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = V
+g=20; 2d      ; ni=0 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = X
+g=20; 2d      ; ni=1 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = X
+g=20; rand+2d ; ni=0 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = V
+g=20; rand+2d ; ni=1 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = V
+g=20; tree    ; ni=0 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = X
+g=20; tree    ; ni=1 |num_colors =    20 |num_towers =    52 | connected = V | sconnected = X
+```
+
+Note that the results are a bit worse for strong connectivity, because $k$ is
+smaller. However, all the resulting overlay graphs in this experiment are
+weakly connected.
+
+
+## Explaining the weak connectivity
+
+We currently don't have any rigorous proofs for the weak connectivity of the
+towers overlay directed graph for $k = \log_{2}{n}$. We could apply
+the following approximate explanation:
+
+Every tower is connected in the overlay graph to a few other towers. If these
+connections were random, then we would expect that for $k > \log(\sqrt{n})$ the
+towers overlay graph [will start becoming weakly
+connected](https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model).
+
+This is not exact, because the connections between the towers are not really
+random, as a connection between two towers mean that they are close in the
+original graph.
+
+
+

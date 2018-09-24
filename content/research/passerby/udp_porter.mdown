@@ -1,0 +1,109 @@
+Title: Passerby UDP Porter
+Date: 2017-08-24 20:18
+Author: real
+
+**work in progress!**
+
+## Intro
+
+The Passerby routing protocol allows routing of messages in a network of nodes,
+where every node $v$ is directly connected to a few other predefined nodes.
+These nodes are called the direct neighbors of $v$.
+
+Passerby UDP Porter is a mechanism for maintaining direct neighbors for
+Passerby as UDP connections.
+
+
+## Initialization
+
+The passerby UDP porter of node $v$ begins with the following input:
+
+- A list of known remote nodes: (nodePublicKey, ip, port)
+
+In every tuple of known remote node, ip and port are optional. This means that
+it is possible for a $a$ to know about the public key of node $b$ without
+knowing about his IP address. 
+
+
+TODO: Fill in UDP related details:
+
+- Possibly explain how to support larger datagrams?
+    - Sending multiple smaller datagrams using secret sharing?
+    - How to verify secret sharing?
+    - Possible error correction?
+
+
+## Messages in a UDP porter link
+
+**Hello** (L0)
+
+- randValue (128 bit)
+
+This is the first message sent during the setup of a UDP porter link. It
+introduces the identity of the remote host.
+
+randValue is the first random value sent by this side of the connection. It
+is required for sending EncMessage messages without the issue of replay
+attacks.
+
+**EncMessage** (L0)
+
+- encSymmetricKey == Encrypt{key=recipientPublicKey}
+    - pastKeepaliveRandValue (A randValue from the near past)
+    - symmetricKey
+    - senderPublicKey
+    - Sign{key=senderPublicKey}(keepaliveRandValue, symmetricKey, 
+            senderPublicKey)
+- encDatagramData == Encrypt{key=symmetricKey, nonce=random}(
+    pastKeepaliveRandValue, L1Content)
+
+A message that contains an underlying Passerby routing engine message.
+
+
+**KeepAlive** (L1) // EncMessage
+
+- randValue (128 bit)
+
+This message is sent periodically, to show that the link is still open.
+It contains randValue, which is a random value to be used as a replay attack
+countermeasure in EncMessage messages.
+
+This message marks that the sender is actually the one that was stated in the
+Hello message. It should be sent as the first EncMessage, immediately after
+Hello message was received. It marks the beginning of the UDP porter link.
+
+
+**UserMessage** (L1) // EncMessage
+
+- content
+
+Allows to send user messages over the UDP porter link.
+
+
+## Forming a UDP Porter link
+
+If $a$ has the remote address of $b$ and there is not yet an open UDP porter
+link between $a$ and $b$, $a$ performs the following:
+
+1. $a$ sends Hello message to $b$. This message contains a random value.
+2. $b$ sends KeepAlive message to $a$ using the random value that is has
+   obtained from $b$'s Hello message.
+
+
+Upon receipt of a KeepAlive message at $a$ from $b$:
+
+1. If $b$'s public key is not registered at the node $a$, $a$ ignores the
+   message.
+
+2. If $a$ has opened a UDP porter link to $b$:
+    1. $a$ updates the liveliness of $b$.
+
+3. Else, if $a$ doesn't yet have a UDP porter link to $b$:
+    1. $a$ opens a UDP porter link to $b$, initializing the liveliness value of
+       $b$.
+    2. $a$ sends a KeepAlive message to $b$ using the random value from the
+       last KeepAlive message sent by $b$.
+
+
+If $a$ has an open UDP porter link to $b$ and $b$ hasn't sent a KeepAlive
+message for a long enough time, the link is considered to be close.

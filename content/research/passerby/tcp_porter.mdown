@@ -1,0 +1,128 @@
+Title: Passerby TCP Porter
+Date: 2017-08-12 21:21
+Author: real
+Status: draft
+
+**work in progress!**
+
+## Intro
+
+The Passerby routing protocol allows routing of messages in a network of nodes,
+where every node $v$ is directly connected to a few other predefined nodes.
+These nodes are called the direct neighbors of $v$.
+
+Passerby TCP Porter is a mechanism for maintaining direct neighbors for
+Passerby as TCP connections.
+
+
+## Initialization
+
+The passerby TCP porter of node $v$ begins with the following input:
+
+- A list of known remote nodes: (nodePublicKey, ip, port)
+
+In every tuple of known remote node, ip and port are optional. 
+
+If ip and port are included, The node $v$ will attampt to open a TCP connection
+to the remote ip and port (In random time intervals). Upon connection, the node
+will expect the identity of nodePublicKey, and disconnect otherwise. 
+
+In this case it is also possible that a remote node with public key
+nodePublicKey will open a TCP connection to the node $v$. $v$ will accept the
+connection and open a TCP porter link. 
+
+A node will maintain a maximum of 1 TCP connection to a remote node of specific
+public key. As long as a link with a node with public key nodePublicKey is
+open, $v$ will not try to open a TCP connection to the remote host of the entry
+(nodePublicKey, ip, port)
+
+If ip and port are missing from the entry, the node will be waiting for a TCP
+connection from a node with the identity of nodePublicKey. The remote node may
+have any ip and port pair.
+
+
+## Messages in a TCP porter link
+
+**Hello** (L0)
+
+- nodePublicKey
+- randValue (128 bit)
+
+This is the first message sent during the setup of a TCP porter link. It
+introduces the identity of the remote host.
+
+randValue is the first random value sent by this side of the connection. It
+is required for sending EncMessage messages without the issue of replay
+attacks.
+
+**EncMessage** (L0)
+
+- encSymmetricKey == Encrypt{key=recipientPublicKey}
+    - pastKeepaliveRandValue (A randValue from the near past)
+    - symmetricKey
+    - Sign{key=senderPublicKey}(keepaliveRandValue, symmetricKey)
+- encDatagramData == Encrypt{key=symmetricKey, nonce=random}(
+    pastKeepaliveRandValue, L1Content)
+
+A message that contains an underlying Passerby routing engine message.
+
+
+**KeepAlive** (L1) // EncMessage
+
+- randValue (128 bit)
+
+This message is sent periodically, to show that the link is still open.
+It contains randValue, which is a random value to be used as a replay attack
+countermeasure in EncMessage messages.
+
+This message marks that the sender is actually the one that was stated in the
+Hello message. It should be sent as the first EncMessage, immediately after
+Hello message was received. It marks the beginning of the TCP porter link.
+
+
+**UserMessage** (L1) // EncMessage
+
+- content
+
+Allows to send user messages over the TCP porter link.
+
+
+## Forming a TCP Porter link
+
+The following happens during a setup of TCP Porter link between $a$ and $b$:
+
+1. $a$ opens a TCP connection to $b$.
+2. $a$ sends Hello message to $b$. This message contains $a$'s public key and a
+   random value.
+3. Filtering ($b$):
+    - If $b$ doesn't expect TCP Porter link from $a$'s public key, $b$ closes
+        the TCP connection. 
+    - If $b$ already has a TCP Porter link from $a$'s public key, $b$ closes
+       the TCP connection.
+4. Otherwise, $b$ sends Hello message to $a$.
+5. Filtering ($a$):
+    - If $a$ already has a TCP Porter link from $b$'s public key, $a$ closes
+        the old TCP connection.
+5. $a$ and $b$ both send KeepAlive messages over EncMessage. At this point the
+   TCP Porter link is said to be open.
+6. $a$ and $b$ can now send UserMessage messages using the values from the
+   RandValue messages.
+
+
+## Dealing with races in Passerby direct connections
+
+It is possible that $a$ opens a TCP Porter link to $b$, and at about
+the same time $b$ opens a TCP Porter link to $a$. In this situation $a$ and $b$
+could have two simultaneous TCP connections.
+
+If a node $v$ already have a direct connection from some public $pk$, and a
+new TCP Porter link is established from the same public key $pk$, $v$ closes the
+old TCP Porter link.
+
+In the case discussed above where $a$ and $b$ open TCP Porter links
+simultaneously, it is possible that $a$ and $b$ will close both of the TCP
+connections, and no TCP connection will be left open. By randomizing the
+connection time, we expect that at some time in the future either $a$ or $b$
+will open a TCP connection before the other and a TCP Porter link will be
+established successfuly.
+

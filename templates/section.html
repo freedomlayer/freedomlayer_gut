@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "post_macros.html" as post_macros %}
+
+{% block custom_content %}
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">{{ section.title }}</h1>
+    </header>
+    <div itemprop="articleBody">
+      {{ section.content | safe }}
+    </div>
+
+    {% block section_footer %}
+        <footer>
+            <hr>
+            <p>
+                {% if config.extra.author %}
+                    Published by {{ config.extra.author }}
+                {% endif %}
+                {% if section.taxonomies.categories %}
+                    {% set category = section.taxonomies.categories[0] %}
+                    in <a href="{{ get_taxonomy_url(kind="categories", name=category) | safe }}">{{ category }}</a>
+                {% endif %}
+                {% if section.taxonomies.tags %}
+                    and tagged
+                    {% for tag in section.taxonomies.tags %}
+                        <a href="{{ get_taxonomy_url(kind="tags", name=tag) | safe }}">{{ tag }}</a>
+                        {% if section.taxonomies.tags | length > 1 %}
+                            {% if loop.index != section.taxonomies.tags | length %}
+                                {% if loop.index == section.taxonomies.tags | length - 1 %}
+                                    and
+                                {% else %}
+                                    ,
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </p>
+        </footer>
+    {% endblock section_footer %}
+</article>
+{% endblock custom_content %}
+

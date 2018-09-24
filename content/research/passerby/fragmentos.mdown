@@ -1,0 +1,323 @@
+Title: Fragmentos fragmentation system
+Date: 2017-08-29 15:18
+Author: real
+
+**work in progress!**
+
+## Abstract
+
+Fragmentos is a fragmentation system allowing to send large datagrams over
+protocols that support only small datagrams. Compared to traditional
+fragmentation systems, Fragmentos sends about twice more data while achieving
+improved delivery rate.
+
+## Intro
+
+Given two nodes $x$ and $y$ on the internet, if $x$ attempts to send a large
+UDP datagram $y$, it is likely that the datagram will be fragmented, in the
+lower IP layer, to a few IP packets. Those IP packets will be reconstructed
+somewhere on a router on the way, or possibly at the endpoint $y$.
+
+Traditional IP Packet fragmentation works by splitting a large IP packet into a
+few smaller packets. The problem with this method is that the original large
+packet is less likely to arrive at its destination, as the loss of any of the
+fragments will lead to the loss of the original large packet. 
+
+Thinking about a naive probabilistic model, if an IP packet sent from $x$ to
+$y$ arrives at $y$ with probability $p$, then a datagram which was fragmented
+to two IP packets will arrive at probability $p^2$. If $p = \frac{3}{4}$, then
+$q := p^2 = \frac{9}{16}$, which represents much lower odds for successful
+delivery.
+
+This document presents a different fragmentation method which increases the
+likelihood of successful delivery given the model discussed above. For example,
+Instead of splitting a large datagram into two packets, we create three shares
+of the datagram in a way that every two shares are enough to reconstruct the
+original datagram. 
+
+In this case, if $x$ wants to send the datagram to $y$, $x$ sends all the three
+shares of the datagram to $y$. In the naive model described above where the
+odds of successful delivery for one IP packet are $p$, we obtain that the odds
+for successful arrival for the complete datagram are 
+$q := p^3 + 3\cdot p^2 \cdot (1-p)$. For $p = \frac{3}{4}$, this will result in
+$q = 0.84375$. Surprisingly in this case $q > p$.
+
+
+## Splitting a small chunk
+
+Given a chunk of data $W$ of size $b$ bytes, we want to split it to $2b-1$
+shares, so that every $b$ shares are enough to reconstruct the original chunk.
+
+Using information theoretic considerations we can
+conclude that each share should be of size at least $len(M) / b$, so that the
+reconstruction algorithm gets at least $b \cdot (len(M) / b) = b$ bytes of input.
+
+We will do this in a method similar to [Shamir's secret
+sharing](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing). We treat the
+given chunk $W$ as the coefficients of a polynomial $P_W$ over the [Galois
+field](https://en.wikipedia.org/wiki/Finite_field#GF.2816.29) $Gf(256)$. The
+first byte of the message $W$ is considered to be the most coefficient of
+monomial of the highest degree in the polynomial.
+
+A share of the chunk $W$ is a pair of bytes $(i, P_W(i))$, for $0 \leq i < 2b -
+1$. In other words, a share is a point that the polynomial $P$ goes through.
+
+Given $b$ shares of the chunk $W$ we can always reconstruct a polynomial $Q$ of
+degree $b-1$ that goes through the set of points provided as shares. For
+example, we could do this using [Lagrange
+interpolation](https://en.wikipedia.org/wiki/Lagrange_polynomial).
+
+As $Q$ and $P_W$ are two polynomials of degree $b-1$ that agree on $b$ points,
+they must be equal. Therefore using any $b$ shares we can reconstruct the
+$P_W$ and the chunk $W$.
+
+We picked $Gf(256)$ with modulo polynomial $x^8 + x^4 + x^3 + x^2 + 1$
+(Represented at `0x1D` in byte form) as the underlying field. $GF(256)$ has
+exactly $256$ elements, which means that we have an exact mapping between a
+byte value and an element of the field, thus avoiding various encoding and
+decoding problems.
+
+On the other hand, the choice of $GF(256)$ imposes a limitation on the amount
+of shares we can produce for one chunk. As every share $(i, P_W(i))$ should have
+a unique $i$, we can have no more than $256$ shares. This means that $2b - 1
+\leq 256$, hence $b \leq 128$.
+
+
+## Splitting a large message
+
+Given a message $M$ of certain size $len(M)$, we would like to split it to
+$2b-1$ data shares, so that every $b$ data shares could be used to reconstruct
+the original chunk of data. Note that in the previous section we solved this
+problem for $M$ with $len(M) = b$. Here we want to solve this problem for a
+message $M$ of arbitrary size.
+
+First we divide $M$ into chunks of size $b$ bytes. If $len(M)$ is not
+divisible by $b$, we add padding $0$ bytes to the end of $M$. This means that
+the last chunk has possibly some $0$ bytes in the end.
+
+For example, if $M$ is the message `12 34 56 78 90 ab cd ef 55` (Every two
+characters are one byte, base 16) and $b = 4$, we will get the following
+chunks (Every line represents a chunk):
+
+```
+12 34 56 78
+90 ab cd ef
+55 00 00 00
+```
+
+Note that the last chunk has three $0$ padding bytes.
+
+Next, we divide each chunk $W$ of size $b$ bytes into $2b-1$ small shares. We
+do this as described in the previous section "splitting a chunk". For every
+resulting small share $(i, P_W(i))$ we take the value $P_W(i)$ and add it to
+data share number $i$.
+
+Eventually we will have $2b - 1$ data shares, each one having $v := \lceil len(M) /
+b \rceil$ bytes. Given that $M$ is divided to the chunks $W_0,  W_1, W_2
+\dots W_{v-1}$, byte number $k$ in data share $i$ is $P_{W_k}(i)$.
+
+Continuing the previous example of the message $M$: `12 34 56 78 90 ab cd ef
+55`, every chunk is split into $2b - 1 = 7$ small shares:
+
+```
+                ds0 ds1 ds2 ds3 ds4 ds5 ds6
+               ----------------------------
+12 34 56 78 ->  78  08  94  88  ae  ab  05
+90 ab cd ef ->  ef  19  0a  bb  6d  14  8a
+55 00 00 00 ->  00  55  92  24  e4  c1  3d
+```
+
+And we obtain the following $2b - 1 = 7$ data shares:
+
+```
+ds0: 78 ef 00
+ds1: 08 19 55
+ds2: 94 0a 92
+ds3: 88 bb 24
+ds4: ae 6d e4
+ds5: ab 14 c1
+ds6: 05 8a 3d
+```
+
+Every $b = 4$ shares from these $2b - 1 = 7$ data shares are enough to
+reconstruct the original message $M$.
+
+
+## Fragmentos messages structure
+
+A message $M$ from is sent from $x$ to $y$ by transmitting a few Fragmentos
+messages. Each **Fragmentos message** is of the following form:
+
+```
+- messageId         [8 bytes]
+- b                 [1 byte]
+- shareIndex        [1 byte]
+- shareData         [variable amount of bytes]
+- errorCorrection   [8 bytes]
+```
+
+The actual data that we split to data shares is: 
+
+`T := nonce8 || paddingCount || M || padding`
+
+Where `||` means concatenation. `nonce8` is of size $8$ bytes, `paddingCount`
+is of size $1$ byte.
+
+The value `paddingCount := (b - ((8 + 1 + len(M)) % b)) % b` is the amount of $0$
+padding bytes at the end of the message $M$. Recall that we need padding bytes
+at the end of $M$ to make sure that the data we split to data shares, $T$, is
+of size divisible by $b$. We use the value of `paddingCount` to be able to cut
+the padding bytes at the receiving side.
+
+`nonce8` is a random 8 bytes nonce that is generated at the time of sending the
+message $M$. It is used as means for the receiver end to distinguish between
+identical messages sent during the same short period of time. For two identical
+messages, different `nonce8` values will generate different `messageId`-s.
+
+
+`messageId` is obtained by calculating `sha256` over `T`, taking only the first
+$8$ bytes of the result.
+
+`b` represents the amount of shares that are required to reconstruct the
+original message. It is necessary that $b \in [1, 128]$. Any other value of $b$
+is illegal. A message with illegal $b$ value must be ignored.
+
+`shareIndex` is the index of the current share. There are $2b - 1$ shares,
+therefore $0 \leq shareIndex < 2b - 1$. Any other value of $shareIndex$ is
+illegal. A message with illegal $shareIndex$ value must be discarded.
+
+`shareData` is the actual data of this share. Its length could be deduced by
+subtracting the total size of all the other fields from the total size of the
+datagram. It contains a share of the data `T`.
+
+`errorCorrection` is an $8$ bytes [Reed
+Solomon](https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction)
+error correction code. Currently we use the implementation of the
+[reed-solomon](https://docs.rs/reed-solomon/0.1.6/reed_solomon/) rust crate for
+this functionality. The error correction code is applied for whole contents of
+the Fragmentos message. It should be able to detect $8$ bytes errors, and fix
+the message given that at most $4$ byte errors have occurred.
+
+
+## Maximum Fragmentos datagram
+
+We assume that we use a protocol where we can not send datagrams over $n$ bytes.
+We begin by calculating the maximum size of datagram we can send using the
+Fragmentos system over the given protocol.
+
+We can split a message to at most $256$ shares, a restriction imposed by the
+size of the field $GF(256)$. Therefore $2b - 1 \leq 256$ and $b \leq 128$.
+
+Every message share resides inside a Fragmentos message. The rest of the fields
+in a Fragmentos message (`messageId, b, shareIndex, errorCorrection`) take $8 +
+1 + 1 + 8 = 18$ bytes. Hence we are left with $n - 18$ bytes for `shareData`.
+
+Therefore we should be able to send a `T` data message of size at most $128
+\cdot (n-18)$. Recall that `T` contains `nonce8, paddingCount` which take
+together $8 + 1 = 9$ bytes. This leaves $d(n) := 128\cdot(n-18) - 9$ bytes for $M$.
+
+
+If we use UDP as the underlying protocol for sending datagrams, we can pick as
+an example the value $n=512$ as a safe size for a UDP packet. By safe we mean
+that it is unlikely for the UDP packet to be fragmented by the lower IP layer.
+
+As a result, we obtain $d(n) = 128 \cdot (512 - 18) - 9 = 63223$ bytes (close
+to $64KB$) as the maximum possible Fragmentos datagram.
+
+
+## Sending a message
+
+We assume the value $n$ for the maximum size for a safe datagram in the
+underlying datagram protocol.
+
+Algorithm for sending a message $M$:
+
+1. If $len(M) > d(n)$, the message is too large. We abort.
+
+2. Calculate $b := \lceil\frac{8 + 1 + len(M)}{n - 18}\rceil$.
+
+3. Construct `T := nonce8 || paddingCount || M || padding`.
+   `padding` should contain enough `\x00` bytes so that `T` will have length
+   that is divisible by $b$. `paddingCount` is set to the amount of padding
+   bytes.
+
+4. Split `T` to $2b-1$ data shares.
+
+5. For each data share of `T`, create a Fragmentos message and send it to the destination. 
+   The message's fields will be filled as follows:
+
+    - `messageId = sha256(T)[0:8]`
+    - `b`
+    - `shareIndex` is the data share number.
+    - `shareData` is the data of the share.
+    - `errorCorrection` is calculated over all the previous fields of the
+        message.
+
+
+
+## Receiving a message
+
+### Structures to maintain in memory:
+
+- `usedMessageIds`: A set of messageIds that were recently processed.
+    A messageId has to stay in this list for at least `PROCESSED_TIMEOUT`
+    seconds. Then it may be removed.
+
+- `curMessages`: A dictionary for currently processed
+    messages, having messageIds as keys. Every entry contains:
+
+    - The value `b`.
+    - `shareLengh`: length (in bytes) of a share data. (All shares should have 
+        exactly the same amount of bytes).
+    - A set of the received data shares: `(shareIndex, shareData)` 
+
+
+
+### Upon receiving a Fragmentos message `F`:
+
+1. Use `F.errorCorrection` error correction code to possibly correct the
+   message's content. If not possible, discard the message.
+
+2. If `F.messageId` is in `usedMessageIds`,
+   `usedMessageIds[F.massageId]` is refreshed, so that it will stay
+   another `PROCESSED_TIMEOUT` seconds before being cleaned up. The message is
+   discarded.
+
+3. If there exists an entry `entry` with the key `F.messageId` inside
+   `curMessages` but `entry.b != F.b` or `entry.shareLength !=
+   len(F.shareData)`, discard the message.
+
+4. If there is no entry with the key `F.messageId` inside `curMessages`,
+   create a new entry with `messageId = F.messageId`, `b = F.b` and
+   `shareLength = len(F.shareData)`.
+
+5. Given that the message was not discarded yet, denote by `entry` the relevant
+   entry from `curMessages` relevant for our message.
+
+6. If `F.shareIndex` is already present in `entry`, discard the message.
+
+7. Insert `(F.shareIndex, F.shareData)` as a new data share to
+  `entry`.
+
+8. If the amount of shares in the entry is less than `b`, return.
+
+9. Add `messageId` to `usedMessageIds`. 
+
+10. Remove `entry` from `curMessages`.
+
+11. Reconstruct the shares to obtain `T := nonce8 || paddingCount || M || padding`. 
+
+12. If `sha256(T)[0:8] != entry.messageId`:  remove the entry from `curMessages`
+   and return.
+
+13. Extract `M` from `T` and return it as a received message.
+
+
+### Cleanup algorithm (Being ran periodically):
+
+- If an `entry` in `curMessages` is older than `PROCESSED_TIMEOUT` seconds,
+    remove it and add `entry.messageId` to `usedMessageIds`.
+
+- If a `messageId` in `usedMessagesIds` is older than `PROCESSED_TIMEOUT`
+    seconds, remove it.
+

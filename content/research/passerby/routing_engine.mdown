@@ -1,0 +1,350 @@
+Title: Passerby Routing Engine
+Date: 2017-08-09 12:50
+Author: real
+
+**work in progress!**
+
+
+## Abstract
+
+Passerby is an experimental datagram routing protocol. We present here the
+ideas of how Passerby protocol works and provide details about how to
+implement it.
+
+The main goal of the Passerby protocol is passing encrypted messages between
+nodes in a network with high probability of success.
+
+
+## Core routing algorithm
+
+The Passerby protocol assumes a connected network of nodes. Every node is
+directly connected to a few other nodes in some way. A direct connection could
+be a TCP connection over the internet, a direct wifi connection, a direct
+bluetooth connection or any other type of connection. It is assumed that the
+direct connection two nodes is TCP like: It is reliable and sends messages in
+order.
+
+Routing in the network is relies on the existence of Index nodes. Index
+nodes are nodes that contain an approximate full map of the network, and they
+provide short paths between nodes as a service. Whenever a node $v$ wants to
+send a message to some remote node $u$, $v$ first asks for a path from $v$ to
+$u$ from one of the index nodes. $v$ then uses that path to send the message
+to the node $u$.
+
+Index nodes perform difficult work. An index node deals with much more
+bandwidth than a usual node, as it has to keep an updated view of the
+network graph. In addition, an index node makes heavy use of its computation
+resources to calculate short paths between nodes in the the large network
+graph.
+
+
+## Index nodes setup
+
+As index nodes are crucial for the ability of nodes to route message in the
+network, index nodes should be accessible to every node.
+To make this work, every index node advertises its existence periodically. This
+is done by sending a message to all his direct neighbors in the network,
+declaring himself as an index node, signing over a timestamp.
+
+Every node $v$ keeps at all times paths to the closest index nodes he knows of.
+He keeps $k$ different paths to closest index nodes through every direct
+neighbor he has. Hence even if some of $v$'s direct neighbors give $v$ paths to
+invalid index nodes, $v$ will still have some paths to valid nodes from his
+other direct neighbors.
+
+We denote $v$'s list of closest index nodes and their paths as $L(v)$.
+Whenever any node in this list changes, $v$ informs all of his neighbors about
+the change. Using this method changes in the state of index nodes in the
+network propagates to all the relevant nodes in the network in a short time.
+
+Changes to a nodes best known index nodes list can happen due to finding a new
+closer index node, or the expiry of some index node, due to a timestamp being
+too old.
+
+## Network indexing
+
+Index nodes maintain an approximate view of the current structure of the
+network. A node $v$ sends to some randomly chosen index nodes from $L(v)$ about
+his direct connections to his neighbors. A message that contains information
+about such connections also contains a signature. This signature is later used
+as a proof by the index node. 
+
+As an example: If $v$ has a direct neighbor node $u$, $v$ sends to some
+randomly chosen index nodes from $L(v)$ the connection $v \rightarrow u$,
+together with a signature of $v$ over $u$. The signature can later be used to
+prove that $v$ claimed to be a direct neighbor of $u$. In addition, this
+message will contain a signed timestamp by $v$, to show that this direct
+connection is not too old. 
+
+Messages about direct connections between nodes are sent in the following
+occasions:
+
+- Periodically. This allows indexing nodes to perform a periodic cleanup of
+  connections with old timestamps.
+
+- Whenever a connection is formed: If $v$ has a new direct neighbor $u$, he
+  will immediately send a message about this connection to some random
+  collection of the index nodes in $L(v)$.
+
+- Whenever a connection is lost: If $v$'s direct neighbor $u$ has disconnected,
+  $v$ will send a message about this to some random collection of the index
+  nodes in $L(v)$.
+
+Whenever an index node $w$ receives a message about a change in the network
+structure, it first checks if he have seen this message before (Using some
+local cache mechanism). If this message was seen before, it is discarded. If
+this message is new, $w$ will send it to all of the index nodes in the list
+$L(w)$. We assume that this makes sure that with high probability the message
+will arrive at all the index nodes in the network.
+
+TODO: Assuming a connected network, why do we think that the overlay graph of
+index nodes is connected? Create an experiment to test this. This is a bit
+different than the formation of colored towers. Add here references to our
+experiments.
+
+An index node considers a direct connection to exist between two nodes $v$ and
+$u$ if and only if both $v$ and $u$ have reported and signed over the existence
+of this direct connection.
+
+
+## Querying for paths
+
+Whenever a node $v$ wants to send a message to some remote node $u$, $v$ first
+needs to know about a path of nodes from $v$ to $u$. This is done by asking
+some index nodes for a path.
+
+$v$ chooses a random index node $w$ from $L(v)$ and sends him a request for a path
+from $v$ to $u$. The index node $w$ generates a path from $v$ to $u$ as follows:
+
+1. Choose a random node $x$ from all the nodes that he knows of.
+
+2. Find a shortest path from $v$ to $x$.
+
+3. Find a shortest path from $x$ to $u$.
+
+4. Concatenate the paths, possibly removing cycles.
+
+5. Send the resulting path to $v$.
+
+$v$ then checks the returned path from $v$ to $u$, and verifies all the
+signatures. If the path is valid, it can be used to send messages to $u$.
+
+The choice of returning a path from $v$ to $u$ through a random intermediate
+node $x$ is made to to lower network congestion, and make the communication
+more resilient. 
+
+
+## Main limitations
+
+- Synchronization:
+    - We use the time on node's machines as a source of time for timestamps. The
+      time between different nodes might not be synchronized well. We plan to solve
+      this problem in future designs using a distributed and secure source of time.
+
+- Scalability: 
+    - It is possible that it might become very difficult for index nodes to
+      maintain the full structure of the network and find shortest paths in
+      it as the network becomes very large. However, it seems like this should
+      be manageable for pretty large networks.
+
+- Incentives:
+    - It is bandwidth and CPU consuming to be an Index node, however, Index node
+      operators are not compensated for this extra effort. In addition, the direct
+      neighbors of an index node will probably suffer too from In the future we could
+      use some kind of monetary incentive to compenstate Index node owners.
+
+    - Nodes that relay more data on the network are not compensated for their
+      work.
+
+- Denial of service
+    - It is possible to announce many index nodes that do nothing. If there are
+      enough such index node next to some node $v$, $v$ might not be able to
+      obtain paths to remote nodes.
+
+
+## Passerby router interface
+
+The passerby router is a state machine. It communicates using the following
+messages:
+
+### Input messages:
+
+**Initialize**
+
+- privateKey
+- currentTime
+- isIndexNode
+
+Initialize the state machine.
+
+
+**TimeTick**
+
+- currentTime
+
+Information about the current time.
+
+
+**PortConnected**
+
+- neighborIdHash
+
+A new port was connected to the passerby router.
+
+
+**PortDisconnected**
+
+- neighborIdHash
+
+A port was disconnected from the passerby router.
+
+
+**MsgFromPort**
+
+- portId
+- msg
+
+Message was received from a given port.
+
+**SendMessage**
+
+- remoteNodeIdHash
+- datagramData
+
+A request to send a message to a remote node id hash.
+
+
+
+### Output messages:
+
+**MsgToPort**
+
+- portId
+- msg
+
+A request to send message through port portId.
+
+**MessageReceived**
+- remoteNodeIdHash
+- datagramData
+
+A remote message was received from remoteNodeIdHash.
+
+
+Node id hashes are of size $120$ bits ($15$ bytes). This allows them to fit into
+IPv6 address space of [private
+addresses](https://en.wikipedia.org/wiki/Unique_local_address) (All ipv6
+addresses that begin with the byte 0xfc).
+
+The structure of msg in MsgFromPort and MsgToPort is as follows:
+
+- messageType
+- payload
+
+We rely on a service external to the Passerby router to cut the stream of bytes
+into frames of discrete messages.
+
+
+## Messages between routing engines
+
+Messages are of three possible layers, marked as L0, L1, L2.
+
+A signed path from `srcNodeId` to `dstNodeId` is of the form:
+
+```
+srcNodeId,    timestamp              
+a_1,          sign{nodeId}(a_1, prev)
+a_2,          sign{a_1}(a_2, prev)   
+...
+dstNodeId,   sign{a_{k-1}}(dstNodeId, prev)
+```
+
+A doubly signed path from `srcNodeId` to `dstNodeId` is of the form:
+
+```
+srcNodeId, 
+sign{srcNodeId}(srcNodeId->a_1, timestamp)
+sign{a_1}(a_1->srcNodeId, timestamp)
+a_1
+sign{a_1}(a_1->a_2, timestamp)
+sign{a_2}(a_2->a_1, timestamp)
+a_2
+...
+a_{k-1}
+sign{a_{k-1}}(a_{k-1}->dstNodeId, timestamp)
+sign{dstNodeId}(dstNodeId->a_{k-1}, timestamp)
+dstNodeId
+```
+
+
+**UpdateIndexNode** (L0)
+
+- SignedPathFromIndex
+
+A message about a path to a local index node. This message originates from
+index nodes and propagate through the network. If a node receives this
+message and updates his list of best index nodes as a result, he forwards
+this message to all of his direct neighbors.
+
+
+**RegisterWithIndex** (L0)
+
+- SignedPathToIndex
+
+An index node registers with a local index, to get messages about network
+updates.
+
+
+**MsgByPath** (L0)
+
+- nodeIdPath
+- L1content
+
+Where nodeIdPath is a path of nodeIds.
+This message allows to send content to a remote node using a path of nodeIds.
+
+
+**StructureUpdate** // MsgByPath (L1)
+
+- type: Connect/Disconnect
+- edgeSrc
+- edgeDest
+- nonce
+- timestamp
+- Signature: Sign{edgeSrc}(all message)
+
+
+Sent over MsgByPath. A node reports to an index node about Connect/Disconnect
+event of the edge edgeSrc --> edgeDest. This message is also broadcasted
+between index nodes.
+
+
+**EncDatagram** // MsgByPath (L1)
+
+- encSymmetricKey == Encrypt{key=recipientPublicKey}(symmetricKey)
+- encDatagramData == Encrypt{key=symmetricKey, nonce=random}(
+    timestamp, senderPublicKey, L2content)
+
+Encrypted datagram being passed between nodes.
+
+
+**UserDatagram** // EncDatagram // MsgByPath (L2)
+
+- content
+
+
+## Index node service messages
+
+**RequestPath** // EncDatagram // MsgByPath (L2)
+
+- srcNodeId or srcNodeHashId
+- dstNodeId or dstNodeHashId
+
+Sent from a node to a close index node, requesting a path from srcNodeId to
+dstNodeId.
+
+
+**ResponsePath** // EncDatagram // MsgByPath (L2)
+
+- DoublySignedPath
+

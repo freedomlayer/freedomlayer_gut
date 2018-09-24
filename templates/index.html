@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block custom_content %}
+<main>
+    {% if config.extra.after_dark_title %}
+        <header>
+            <h1>{{ config.extra.after_dark_title }}</h1>
+        </header>
+    {% endif %}
+
+    <div itemprop="articleBody">
+      {{ section.content | safe }}
+    </div>
+
+    {% block page_footer %}
+        <footer>
+            <hr>
+            <p>
+                {% if config.extra.author %}
+                    Published by {{ config.extra.author }}
+                {% endif %}
+                {% if page.taxonomies.categories %}
+                    {% set category = page.taxonomies.categories[0] %}
+                    in <a href="{{ get_taxonomy_url(kind="categories", name=category) | safe }}">{{ category }}</a>
+                {% endif %}
+                {% if page.taxonomies.tags %}
+                    and tagged
+                    {% for tag in page.taxonomies.tags %}
+                        <a href="{{ get_taxonomy_url(kind="tags", name=tag) | safe }}">{{ tag }}</a>
+                        {% if page.taxonomies.tags | length > 1 %}
+                            {% if loop.index != page.taxonomies.tags | length %}
+                                {% if loop.index == page.taxonomies.tags | length - 1 %}
+                                    and
+                                {% else %}
+                                    ,
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </p>
+        </footer>
+    {% endblock page_footer %}
+</main>
+{% endblock custom_content %}
