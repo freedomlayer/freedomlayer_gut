@@ -1,6 +1,8 @@
-Title: Stabilizing Chord
-Date: 2014-11-13 19:41
-Author: real
++++
+title = "Stabilizing Chord"
+description = ""
+date = 2014-11-13 
++++
 
 
 <!--
@@ -125,7 +127,7 @@ the farthest node, with respect to the distance function $d$. (I remind you
 that for $x,y \in B_s$,  $d(x,y) = y - x$ if $y > x$, and $d(x,y) = 2^s
 + (y - x)$ otherwise.
 
-![single vs double link]({filename}images/single_vs_double_link.svg)
+![single vs double link](single_vs_double_link.svg)
 
 (On the left: A one way link ring network. Every node is connected to the next
 one. On the right: A two way link ring network. It is a bit more robust.)
@@ -176,7 +178,7 @@ and $z$.prev = $x$, but in our case $x$ and $z$ do not have enough
 information to do that. They just don't see far enough.
 
 
-![y disconnected]({filename}images/y_disconnected.svg)
+![y disconnected](y_disconnected.svg)
 
 (On the left: The original state of the network. On the right: The state of the
 network after $y$ has failed.
@@ -193,7 +195,7 @@ will be $x$ and $x_2$. $x$ will finally set $x$.next = $x_1$, and
 $x$.prev = $x_1$. (This one was left unchanged). Please follow the
 Stabilize algorithm and make sure that you understand why).
 
-![y disconnected stabilize 1]({filename}images/y_disconnected_stb1.svg)
+![y disconnected stabilize 1](y_disconnected_stb1.svg)
 
 In this picture: The state of the network after one Stabilize iteration. We
 mark by purple arrows the links that are not yet optimal. (They are going to
@@ -219,7 +221,7 @@ However it is interesting to see that it fixes itself eventually. As opposed to
 the one dying node case, if two nodes die the network is not connected anymore,
 and there is no hope to fix it.
 
-![y disconnected stabilize all]({filename}images/y_disconnected_stb_all.svg)
+![y disconnected stabilize all](y_disconnected_stb_all.svg)
 
 In the picture: The self fixing process of the network using iterations of
 Stabilize (After a node $y$ failed). It is very slow.
@@ -238,7 +240,7 @@ and previous neighbours on the ring, we will link $x$ to his $k$ immediate
 next neighbours on the ring, and $k$ immediate previous neighbours on the
 ring.
 
-![ring 2]({filename}images/ring_2.svg)
+![ring 2](ring_2.svg)
 
 In the picture: An example ring with $k = 2$. In this network one failed node
 will be fixed quickly.
@@ -303,7 +305,7 @@ I also remind you that by $\ceil{y}$ we mean the first node (clockwise) that has
 name bigger or equal to $y$. By $\floor{y}$ we mean the first node
 (counter-clockwise) that has a name smaller or equal to $y$.
 
-![floor and ceil]({filename}images/floor_ceil.svg)
+![floor and ceil](floor_ceil.svg)
 
 In the picture: Some value $v$, and the nodes $\floor{v}, \ceil{v}$
 
@@ -396,50 +398,49 @@ If you just want to see how Stabilize$^*_k$ looks like in the code, I
 include it here:
 <%text>
 
-    :::python
-    def stabilize(self,node_name):
-        """
-        Try improving immediate links by asking first level links.
-        Done according to the Chord Stabilizing article.
-        """
-        # Get the node's class:
-        nd = self.nodes[node_name]
-        # Initialize the Known nodes set:
-        known = set(nd.links)
+```python
+def stabilize(self,node_name):
+    """
+    Try improving immediate links by asking first level links.
+    Done according to the Chord Stabilizing article.
+    """
+    # Get the node's class:
+    nd = self.nodes[node_name]
+    # Initialize the Known nodes set:
+    known = set(nd.links)
 
-        for ln in nd.links:
-            known.update(self.nodes[ln].links)
+    for ln in nd.links:
+        known.update(self.nodes[ln].links)
 
-        # Remove myself from the known set:
-        known.discard(node_name)
+    # Remove myself from the known set:
+    known.discard(node_name)
 
-        # Find the optimal local links:
+    # Find the optimal local links:
 
-        known_lst = list(known)
-        nd.local_links = set()
-        # Find "before nd" k best local links:
-        known_lst.sort(key=lambda z:self.name_dist(z,node_name))
-        nd.local_links.update(set(known_lst[:self.k]))
-        # Find "after nd" k best local links:
-        known_lst.sort(key=lambda z:self.name_dist(node_name,z))
-        nd.local_links.update(set(known_lst[:self.k]))
+    known_lst = list(known)
+    nd.local_links = set()
+    # Find "before nd" k best local links:
+    known_lst.sort(key=lambda z:self.name_dist(z,node_name))
+    nd.local_links.update(set(known_lst[:self.k]))
+    # Find "after nd" k best local links:
+    known_lst.sort(key=lambda z:self.name_dist(node_name,z))
+    nd.local_links.update(set(known_lst[:self.k]))
 
-        # Find optimal far links:
-        nd.far_links = set()
-        for j in range(NODE_NAMESPACE):
-            # First direction:
-            opt = min(known_lst,key=lambda z:self.name_dist(\
-                    (node_name + (2**j)) % NODE_NAMESPACE_SIZE,z))
-            nd.far_links.add(opt)
+    # Find optimal far links:
+    nd.far_links = set()
+    for j in range(NODE_NAMESPACE):
+        # First direction:
+        opt = min(known_lst,key=lambda z:self.name_dist(\
+                (node_name + (2**j)) % NODE_NAMESPACE_SIZE,z))
+        nd.far_links.add(opt)
 
-            # Second direction:
-            opt = min(known_lst,key=lambda z:self.name_dist(\
-                    z,(node_name - (2**j)) % NODE_NAMESPACE_SIZE))
-            nd.far_links.add(opt)
+        # Second direction:
+        opt = min(known_lst,key=lambda z:self.name_dist(\
+                z,(node_name - (2**j)) % NODE_NAMESPACE_SIZE))
+        nd.far_links.add(opt)
 
-        nd.links = nd.local_links.union(nd.far_links)
-
-</%text>
+    nd.links = nd.local_links.union(nd.far_links)
+```
 
 
 
