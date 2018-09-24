@@ -6,6 +6,7 @@ date = 2014-11-09
 
 
 <h3>Abstract</h3>
+
 We discuss motivation for creating a distributed network instead or on top of
 the internet. Then we write down a list of specific requirements from this
 network. Finally we introduce the Flooding idea as a naive solution for this
@@ -13,7 +14,8 @@ problem, and explain why it won't do.
 
 
 <h3>Motivation for change</h3>
-In [Intro to the Internet]({filename}/articles/freedomlayer/intro_internet/intro_internet.mdown)
+
+In [Intro to the Internet](./research/intro_internet/_index.md)
 we generally discussed how the internet works, and some of the drawbacks of the
 current situation. I remind you the main ones: 
 
