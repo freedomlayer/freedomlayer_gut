@@ -1,6 +1,8 @@
-Title: Basic DHT security concepts
-Date: 2014-11-27 10:03
-Author: real
++++
+title = "Basic DHT security concepts"
+description = ""
+date = 2014-11-27 
++++
 
 <!--
 ceil and floor latex macros:
@@ -176,7 +178,7 @@ to perform.
 
 In the following sections we will try to deal with various security issues that
 might arise in a DHT. We have met the [Chord
-DHT]({filename}/articles/freedomlayer/dht_intro/dht_intro.mdown) but this might
+DHT](./research/dht_intro/_index.md) but this might
 apply to a wider range of DHT structures.
 
 Regarding the Adversarial model: We are going to assume a Node Bounded Slow
@@ -366,7 +368,7 @@ $f(a)$. This interval is exactly between $\floor{k}$ and $k$ - Right
 between the node that is currently responsible over the key $k$, and the key
 $k$ itself.
 
-![Wanted interval floor k]({filename}images/wanted_interval_floor_k.svg)
+![Wanted interval floor k](wanted_interval_floor_k.svg)
 
 In the picture: The interval that the Adversary wants to land on to take over
 the key $k$ is marked with the green color.
@@ -498,7 +500,7 @@ way: $y$ will send $x$ periodic riddles, and ask $x$ to solve those
 riddles. If $x$ doesn't manage to solve the riddles in time, $y$ will
 disconnect $x$.
 
-![Riddle Exchange]({filename}images/riddle_exchange.svg)
+![Riddle Exchange](riddle_exchange.svg)
 
 In the picture: Illustration of the riddles exchange between two linked nodes.
 Each node sends periodically a riddle to the other, and waits for a correct
@@ -553,7 +555,7 @@ sending back the solution $S$ to $z$. $z$ then returns the solution $S$
 back to $x$, and $x$ accepts the solution. This way $z$ doesn't have to
 solve any riddles that $x$ sends.  
 
-![Riddle Redirection]({filename}images/riddle_redirection.svg)
+![Riddle Redirection](riddle_redirection.svg)
 
 In the picture: The riddle redirection attack illustrated. How can you solve
 it?
