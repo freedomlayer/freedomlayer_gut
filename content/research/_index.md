@@ -46,7 +46,7 @@ efficient Internet. We collect here articles about the subject.
         research/multi_named_vdht_routing)
 
     -   [A globally connected overlay for Virtual Ring Routing [pdf]](
-        {filename}/articles/assets/chord_connected_routing.pdf)
+        articles/chord_connected_routing.pdf)
 
 -   Landmarks based Routing:
     -   [Landmarks Navigation by Random Walking](
