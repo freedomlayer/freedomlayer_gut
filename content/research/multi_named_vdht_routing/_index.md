@@ -1,6 +1,8 @@
-Title: Multi Named VDHT Routing
-Date: 2015-10-17 10:49
-Author: real
++++
+title = "Multi Named VDHT Routing"
+description = ""
+date = 2015-10-17
++++
 
 ## Abstract
 
@@ -22,14 +24,14 @@ efficient greedy routing.
 ## Previous attempts
 
 In [Experimenting with Virtual DHT
-Routing]({filename}/articles/freedomlayer/exp_virtual_dht_routing/exp_virtual_dht_routing.mdown)
+Routing](./research/exp_virtual_dht_routing/_index.md)
 we have presented an iterative distributed algorithm that allows each node $x$
 to maintain contact with a few key nodes that are close to $x \pm 2^t$. We used
 experiments to show that this algorithm can work in some cases, but we didn't
 provide any rigorous proof for those claims.
 
 In [About cycles in stationary states of VDHT routing
-algorithms]({filename}/articles/freedomlayer/vdht_cycles_rounds/vdht_cycles_rounds.mdown)
+algorithms](./research/vdht_cycles_rounds/_index.md)
 we presented a slightly different iterative distributed algorithm, IterF, that
 also allows each node $x$ to maintain contact to a few key nodes that are close
 to $x \pm 2^t$. 
@@ -63,7 +65,7 @@ same cycle on any stationary state of the IterF algorithm.
 
 An example for a case of SameCycleA:
 
-![An example of SameCycleA case]({filename}images/same_cycle_a_example.svg)
+![An example of SameCycleA case](same_cycle_a_example.svg)
 
 In this example, we know that the two nodes $x$ and $x + 2^3 - 2^5$ will end up
 on the same cycle.
@@ -78,7 +80,7 @@ We first show that $\overleftarrow{(x + 2^k + 2^t)_{-2^k}} =
 \neq \overleftarrow{x_{2^t}}$. 
 
 ![Illustration of proving the SameCycleA
-Lemma]({filename}images/same_cycle_a_lemma.svg)
+Lemma](same_cycle_a_lemma.svg)
 
 Then we can distinct between two cases:
 
@@ -97,7 +99,7 @@ $\overleftarrow{x_{2^t}}$, because it is closer to $x+2^t$ from the left
 Thus it must be true that $\overleftarrow{y_{-2^k}} = \overleftarrow{x_{2^t}}$.
 
 By the Locality lemma (see [About cycles in stationary states of VDHT routing
-algorithms]({filename}/articles/freedomlayer/vdht_cycles_rounds/vdht_cycles_rounds.mdown))
+algorithms](./research/vdht_cycles_rounds/_index.md))
 there is a direct path between $x$ and $\overleftarrow{x_{2^t}}$, and so $x$ and
 $\overleftarrow{x_{2^t}}$ must be on the same cycle. In the same way, there is a
 direct path between $\overleftarrow{y_{-2^k}}$ to $y$, therefore
@@ -114,7 +116,7 @@ IterF algorithm.
 
 An example for a case of SameCycleB:
 
-![An example of SameCycleB case]({filename}images/same_cycle_b_example.svg)
+![An example of SameCycleB case](same_cycle_b_example.svg)
 
 In this example, we know that the two nodes $x$ and $x + 2^7$ will end up
 on the same cycle. (The value of $z$ does not matter).
@@ -207,7 +209,7 @@ the same cycle for $1 \leq j < r$, and therefore $x$ and $y$ must end up on the
 same cycle on every stationary state of the IterF algorithm.
 
 ![Before and after adding imaginary extra nodes between $x$ and
-$y$]({filename}images/imaginary_extra_nodes_x_y.svg)
+$y$](imaginary_extra_nodes_x_y.svg)
 
 In the picture: Before and after adding imaginary extra nodes between $x$ and
 $y$.
@@ -248,7 +250,7 @@ More paths to remote nodes. The more direct connections a node has, the more
 remote connections he will have to maintain.
 
 ![Before and after adding imaginary extra nodes between all pairs of connected
-nodes]({filename}images/imaginary_extra_nodes_all_pairs.svg)
+nodes](imaginary_extra_nodes_all_pairs.svg)
 
 In the picture: Before and after adding imaginary extra nodes between all pairs
 of connected nodes. The imaginary nodes are shown with lighter color that
