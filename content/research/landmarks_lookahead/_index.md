@@ -1,7 +1,8 @@
-Title: Landmarks routing with lookahead experiment results
-Date: 2017-06-21 12:43
-Author: real
-
++++
+title = "Landmarks routing with lookahead experiment results"
+description = ""
+date = 2017-06-21
++++
 
 ## Abstract
 
@@ -31,7 +32,7 @@ $y$.
 
 Recall that landmarks based routing (Using random walking) was discussed
 earlier in: [Landmarks navigation by random walking](
-{filename}/articles/freedomlayer/landmarks_navigation_rw/landmarks_navigation_rw.mdown).
+./research/landmarks_navigation_rw/_index.md).
 
 We use the network coordinates to approximate distances between nodes in the
 network. This should help us with routing messages between nodes.
@@ -51,7 +52,7 @@ different coordinates $C \neq D$.
 ## Using lookahead
 
 In [Landmarks navigation by random walking](
-{filename}/articles/freedomlayer/landmarks_navigation_rw/landmarks_navigation_rw.mdown)
+./research/landmarks_navigation_rw/_index.md)
 we ran an experiment of routing with network coordinates, relying on a random
 walk. It didn't gave us very good results.
 
@@ -80,8 +81,8 @@ of proving this.
 
 The following experiment is used to check the performance of landmarks routing
 with lookahead, and compare its performance with chord [Virtual DHT
-routing]({filename}/articles/freedomlayer/exp_virtual_dht_routing/exp_virtual_dht_routing.mdown).
-Also see [A globally connected overlay for Virtual Ring Routing [pdf]]( {filename}/articles/assets/chord_connected_routing.pdf).
+routing](./research/exp_virtual_dht_routing/_index.md).
+Also see [A globally connected overlay for Virtual Ring Routing [pdf]](/articles/chord_connected_routing.pdf).
 
 How to read this table? 
 
@@ -99,8 +100,7 @@ numbers to look at. $ni$ means network iteration.
 There are three routing methods we consider: 
 
 - chord: Virtual DHT routing. We programmed the idea presented at [A globally
-  connected overlay for Virtual Ring Routing [pdf]](
-    {filename}/articles/assets/chord_connected_routing.pdf).
+  connected overlay for Virtual Ring Routing [pdf]](/articles/chord_connected_routing.pdf).
 
 - landmarks nei^2: Landmarks routing where every node can see approximately all
   nodes in radius 2 from himself. (His direct neighbors, and the neighbors of his neighbors).
