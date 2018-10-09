@@ -1,6 +1,8 @@
-Title: The Distributed Post Office: Instant Hierarcy for mesh networks
-Date: 2014-12-17 13:47
-Author: real
++++
+title = "The Distributed Post Office: Instant Hierarcy for mesh networks"
+description = ""
+date = 2014-12-17 
++++
 
 
 <h4>Abstract</h4>
@@ -38,7 +40,7 @@ person using a sequence of neighbours. Or, in other words: If we draw a graph
 of all the people in the world (As nodes), and put edges between every person
 and his neighbours, then we get a connected graph.
 
-![Connected Graph Path]({filename}images/connected_graph_path.svg)
+![Connected Graph Path](connected_graph_path.svg)
 
 In the picture: A connected network of people. There is a path of neighbours
 that connects $x$ and $y$.
@@ -103,7 +105,7 @@ There is some shortest path of neighbours between $x$ and $t$ (However
 $x$ doesn't know that path yet). Let's assume that this path of neighbours
 have the people: $(x,x_1,x_2,\dots,x_{k-1},x_k,t)$ in this order. 
 
-![Shortest path x t]({filename}images/shortest_path_x_t.svg)
+![Shortest path x t](shortest_path_x_t.svg)
 
 In the picture: A shortest path between $x$ and $t$. Note that this is not
 the only shortest path between $x$ and $t$.
@@ -181,10 +183,10 @@ deliver messages between every two arbitrary nodes?
 Note that we already tried to solve this question using
 [flooding](http://en.wikipedia.org/wiki/Flooding_%28computer_networking%29),
 [$sqrt{n}$
-routing]({filename}/articles/freedomlayer/sqrt_n_routing/sqrt_n_routing.mdown)
+routing](./research/sqrt_n_routing/_index.md)
 and
 [Virtual DHT
-routing]({filename}/articles/freedomlayer/exp_virtual_dht_routing/exp_virtual_dht_routing.mdown).
+routing](./research/exp_virtual_dht_routing/_index.md).
 
 Instead of checking the height of people, we can use some other properties of
 nodes. We will use some [public key
@@ -207,7 +209,7 @@ certain $h(pub_t)$ value, $x$ can verify it himself. $x$ can send some
 challenge all the way to $t$, and $t$ will send back a response that proves
 he owns the public key $pub_t$. 
 
-![Remote Verification]({filename}images/remote_verification.svg)
+![Remote Verification](remote_verification.svg)
 
 In the picture: $x$ wants to verify that $t$ owns the public key $pub_t$.
 Therefore $x$ sends a challenge to $t$. If $t$ returns a correct
@@ -237,7 +239,7 @@ in some certain area around $x$:
 - $t_x^d$ The "highest" node in the network.
 
 
-![Circles Highest]({filename}images/circles_highest.svg)
+![Circles Highest](circles_highest.svg)
 
 In the picture: Distance rings around $x$. The first ring is distance $0$
 from $x$. It contains only $x$ itself. The next ring contains all nodes of
@@ -280,7 +282,7 @@ path from $t_y^j = t_x^j$ to $y$. Finally, $x$ can create a full path
 from $x$ to $y$ that goes through $t_y^j = t_x^j$. This path could be
 used to send messages.
 
-![Message through mediator]({filename}images/msg_through_mediator.svg)
+![Message through mediator](msg_through_mediator.svg)
 
 In the picture: The node $t_x^4 = t_y^4$ is a mediator between $x$ and
 $y$. $x$ and $y$ can route messages through $t_x^4 = t_y^4$.
@@ -640,7 +642,7 @@ complex method described above, and at the same time have much shorter
 addresses for nodes. We call the $k$ "highest" nodes in the graph **the
 $k$ landmarks**.
 
-![K Landmarks Routing]({filename}images/k_landmarks_routing.svg)
+![K Landmarks Routing](k_landmarks_routing.svg)
 
 In the picture: The nodes $l_j$ for $1 \leq j \leq 5$ are the landmarks
 used for routing messages. $l_j$ is the "highest" node in the network with
