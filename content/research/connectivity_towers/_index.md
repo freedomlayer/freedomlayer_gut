@@ -1,6 +1,8 @@
-Title: The connectivity of sqrt(n) towers
-Date: 2017-08-01 17:32
-Author: real
++++
+title = "The connectivity of sqrt(n) towers"
+description = ""
+date = 2017-08-01
++++
 
 ## Abstract
 
@@ -54,7 +56,7 @@ graph, every tower is connected to $k-1$ other towers and has a self edge
 himself. The self edge happens because a tower $x_c$ of color $c$ has
 $t_c(x_c) = x_c$.
 
-![Overlay directed graph of towers]({filename}images/towers_and_nodes.svg)
+![Overlay directed graph of towers](towers_and_nodes.svg)
 > In the picture: The overlay directed graph between the towers (Self edges are
 > omitted). Note that the graph is connected, but not strongly connected. 
 > The black small dots represent regular nodes. For example: To route a message

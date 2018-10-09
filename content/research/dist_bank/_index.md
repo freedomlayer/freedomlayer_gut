@@ -1,6 +1,8 @@
-Title: The Trusted Supernode and Distributed Banking
-Date: 2015-12-08 12:43
-Author: real
++++
+title = "The Trusted Supernode and Distributed Banking"
+description = ""
+date = 2015-12-08
++++
 
 
 ## Abstract
@@ -166,7 +168,7 @@ $z$ will inspect $x$'s balance and make sure that $x$ has at least $k$ money.
 If this is the case, $z$ will subtract $k$ from $x$'s balance, and add $k$ to
 $y$'s balance.
 
-![A transaction processed by z]({filename}images/centralized_bank_z.svg)
+![A transaction processed by z](centralized_bank_z.svg)
 
 *In the picture: A transaction as processed by a centralized bank $z$.*
 
@@ -581,7 +583,7 @@ signature over his current structure as a proof for his validity.
 
 We call the above process **chain shortening.**
 
-![Basic Chain Shortening]({filename}images/basic_chain_shortening.svg)
+![Basic Chain Shortening](basic_chain_shortening.svg)
 
 
 $sup$ should perform the chain shortening process regularly to keep his proof
@@ -616,7 +618,7 @@ computation or communication).
 Assuming that we have some kind of efficient communication infrastructure, we
 can arrange the supernodes into a DHT in order to achieve this kind of
 hierarchy. We are going to use the [Chord
-DHT]({filename}/articles/freedomlayer/dht_intro/dht_intro.mdown) here.
+DHT](./research/dht_intro/_index.md) here.
 Recall that a DHT is a structure where every participant is directly connected
 to a logarithmic amount of other participants. In addition, every participant
 can reach another participant using logarithmic amount of hops.

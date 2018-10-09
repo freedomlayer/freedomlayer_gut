@@ -1,6 +1,8 @@
-Title: Approximating the size of a mesh network
-Date: 2017-07-28 14:33
-Author: real
++++
+title = "Approximating the size of a mesh network"
+description = ""
+date = 2017-07-28
++++
 
 $$
 \newcommand{\E}{\mathrm{E}}
