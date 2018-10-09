@@ -1,6 +1,8 @@
-Title: About cycles in stationary states of VDHT routing algorithms
-Date: 2015-10-15 17:23
-Author: real
++++
+title = "About cycles in stationary states of VDHT routing algorithms"
+description = ""
+date = 2015-10-15 
++++
 
 ## Abstract
 
@@ -20,7 +22,7 @@ the nodes inside that set. (But not to any node outside that set).
 ## Intro
 
 In [Experimenting with Virtual DHT Routing](
-{filename}/articles/freedomlayer/exp_virtual_dht_routing/exp_virtual_dht_routing.mdown)
+./research/exp_virtual_dht_routing/_index.md)
 we have discussed an idea of routing using a Virtual DHT. 
 follows: Every node in a mesh graph is given a random number from a "closed
 ring", and the nodes somehow try to find each other, iteratively. 
@@ -38,7 +40,7 @@ because the graph is connected, and those paths exist.
 Given that every node of number $x$ knows paths to nodes of numbers $x-2^i,
 x+2^i$, every node $y$ should be able to send a message to any other node $z$ in
 the network using the [greedy routing algorithm of the Chord
-DHT]({filename}/articles/freedomlayer/dht_intro/dht_intro.mdown): In every
+DHT](./research/dht_intro/_index.md): In every
 iteration send the message to the closest known node to the destination.
 
 
@@ -55,7 +57,7 @@ Recall that $d(a,b)$ is the clockwise distance between $a$ and $b$. Hence, In
 other words, $x$ tries to find nodes that are closest to him clockwise and
 counter-clockwise.
 
-![x^l and x^r]({filename}images/x_left_x_right.svg)
+![x^l and x^r](x_left_x_right.svg)
 
 We describe here the algorithm, as executed by one node $x$. The algorithm takes
 as arguments the direct connections of $x$ to other nodes in the network. The
@@ -136,7 +138,7 @@ is not connected. Of a similar reason, $x^r \neq x^{rl}$.
 
 Suppose that $x \neq x^{rl}$. Then we distinct between two cases:
 
-![Two cases for the location of x^{rl}]({filename}images/x_left_right_lemma.svg)
+![Two cases for the location of x^{rl}](x_left_right_lemma.svg)
 
 *Case 1*: $x^{rl} \in (x,x^r)$. (This means: $x^{rl}$ is on the arc between $x$ and
 $x^r$, clockwise). In the next iteration $x$ will send $x^r$ an Update message.
@@ -173,7 +175,7 @@ $k$ is the index of the first element that equals to a previously seen element,
 we conclude that $q=0$ and so $h^k(x) = x$, the first element of the series.
 Therefore the series $x, h(x), \dots, h^k(x)=x$ form a cycle. 
 
-![Cycles formed from the h function]({filename}images/h_iterated_cycles.svg)
+![Cycles formed from the h function](h_iterated_cycles.svg)
 
 Note that this is a generic property of injective functions that operate inside
 finite worlds.
@@ -324,7 +326,7 @@ a cycles that have only one round.
 On the quest of finding a strong enough setting to eliminate cycles with
 multiple rounds, we add more fingers. A nice bet would be to add all the fingers
 of sizes which are powers of $2$, just like in the original
-[Chord DHT structure]({filename}/articles/freedomlayer/dht_intro/dht_intro.mdown).
+[Chord DHT structure](./research/dht_intro/_index.md).
 
 To be more specific: We say that a node $x$ maintains a finger $k$ if $x$
 remembers a path to: 
@@ -391,7 +393,7 @@ $a$ and $\overleftarrow{a_{2^{t+1}}}$. Consider the node
 $\overleftarrow{a_{2^t}}$. We distinct between two cases:
 
 ![\overleftarrow{a_{2^{t+1}}} and
-\overleftarrow{a_{2^t}}]({filename}images/locality_lemma.svg)
+\overleftarrow{a_{2^t}}](locality_lemma.svg)
 
 *Case 1*: $d(\overleftarrow{a_{2^t}},a+2^t) <
 d(\overleftarrow{a_{2^{t+1}}},a+2^{t+1})$. Denote $z :=
@@ -458,7 +460,7 @@ algorithm. Let $x$ be a node inside $C$. By the Locality Lemma there is direct
 path $P$ between $x$ and $\overleftarrow{x_{2^{l-1}}}$. Also, there is a direct
 path $Q$ between $\overrightarrow{x_{-2^{l-1}}}$ and $x$.
 
-![The bath built from P and Q]({filename}images/one_round_theorem.svg)
+![The bath built from P and Q](one_round_theorem.svg)
 
 We can combine the above paths to a total path $T := (P , Q)$
 
