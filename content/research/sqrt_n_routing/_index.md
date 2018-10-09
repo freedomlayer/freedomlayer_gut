@@ -39,7 +39,7 @@ neighbours, we might need to transfer the message through some intermediate
 nodes until it finally reaches its destination, $b$.
 
 In [The mesh question
-article](./research/mesh_question) we already
+article](./research/mesh_question/_index.md) we already
 discussed the
 [flooding](http://en.wikipedia.org/wiki/Flooding_%28computer_networking%29)
 solution. We have seen that it works, but it is not very efficient: Every
