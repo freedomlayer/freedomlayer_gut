@@ -1,6 +1,9 @@
-Title: Experimenting with Virtual DHT Routing
-Date: 2014-12-14 15:51
-Author: real
++++
+title = "Experimenting with Virtual DHT Routing"
+description = ""
+date = 2014-12-14 
++++
+
 
 <h4>Abstract</h4>
 
@@ -35,8 +38,8 @@ the network.
 
 We have seen so far a few ways of routing messages in a mesh network: Flooding
 (See [The mesh
-question]({filename}/articles/freedomlayer/mesh_question/mesh_question.mdown) and
-[sqrt(n) routing]({filename}/articles/freedomlayer/sqrt_n_routing/sqrt_n_routing.mdown).
+question](research/mesh_question) and
+[sqrt(n) routing](research/sqrt_n_routing).
 
 Flooding was pretty inefficient (However pretty robust and secure). The idea of
 $\sqrt{n}$-routing was a bit more efficient, though it required that every
@@ -60,7 +63,7 @@ use Chord in this text.
 
 <h4>Motivation for using a DHT</h4>
 
-Recall that a [DHT]({filename}/articles/freedomlayer/dht_intro/dht_intro.mdown) is
+Recall that a [DHT](research/dht_intro) is
 a special structure of links between nodes. This structure allows to find a
 specific node (or key) quickly (In about $\log{n}$ iterations). If we
 managed somehow to create a DHT between the nodes in the mesh network, we might
@@ -84,7 +87,7 @@ part of the DHT. $y$ then finds the node closest to $x$ (By DHT Identity
 distance) inside the DHT. Let's call that node $z$. $y$ then sends to $x$
 the address of $z$. Finally, $x$ can connect to $z$ and join the DHT.
 
-![DHT Join]({filename}images/dht_join.svg)
+![DHT Join](dht_join.svg)
 
 In the picture: $x$ wants to join the network. Marked in gray is the place in
 the ring where $x$ is supposed to be, right after $z$.
@@ -107,7 +110,7 @@ can use those two paths to construct a path $path(x,y) + path(y,z)$ from $x$ to 
 $y$ can send $path(x,y) + path(y,z)$ to $x$. Then whenever $x$ wants to send a
 message to $z$, $x$ will use the path $path(x,y) + path(y,z)$.
 
-![Concat Path]({filename}images/concat_path.svg)
+![Concat Path](concat_path.svg)
 
 In the picture: The path between $x$ and $z$ is the concatenation of paths
 between $x$ and $y$, $y$ and $z$.
@@ -128,7 +131,7 @@ To use a DHT we need DHT Identities for all the participants. For the rest of
 this text we will use the Chord DHT, and we will choose a random Identities from
 $B_s = \{0,1,2,\dots,2^{s} - 1\}$, where $s$ is large enough. (In practice
 we could choose the Identities in [some other
-way]({filename}/articles/freedomlayer/dht_basic_security/dht_basic_security.mdown),
+way](research/dht_basic_security),
 but let's assume for now they are just random)
 
 Between every two nodes $x,y$ (We use the notation $x$ to denote both the
@@ -141,7 +144,7 @@ Identity value and the node itself) we will define two notions of distance
 - The Virtual Distance: The value $d(x,y) = (y - x) \mod 2^{s}$. This is the
   distance we when we described the Chord DHT.
 
-![Mesh and Ring]({filename}images/mesh_and_ring.svg)
+![Mesh and Ring](mesh_and_ring.svg)
 In the picture: On the right we can see an example for a mesh network. On the
 left, we can see the Virtual DHT. Note that there is no relation between
 distances on the mesh and distances in the Virtual DHT. The Virtual Distance
@@ -194,7 +197,7 @@ may also assume that $x$ knows the DHT Identity of each of his neighbours.
 (This information could be passed in a message between every two adjacent nodes
 in the mesh).
 
-![Local Knowledge]({filename}images/local_knowledge.svg)
+![Local Knowledge](local_knowledge.svg)
 
 In the picture: The local knowledge of the node $x_2$. All the unknown parts
 of the network are colored gray.
@@ -275,7 +278,7 @@ $x$ with the following set of nodes:
 (ident=412351,path_len=1) <br />
 }
 
-![Before Iter Example]({filename}images/before_iter_example.svg)
+![Before Iter Example](before_iter_example.svg)
 
 In the picture: Schematic picture of the Virtual DHT ordering of all the nodes
 mentioned above.
@@ -381,7 +384,7 @@ successor finger $t$ of $x$. The value $x-2^{t}$ is called the
 predecessor finger $t$ of $x$. (Note: recall that the addition here is done
 modulo $2^s$).
 
-![DHT Fingers]({filename}images/dht_fingers.svg)
+![DHT Fingers](dht_fingers.svg)
 
 In the picture: The Chord DHT fingers. We can see both the successor fingers
 and predecessor fingers.
@@ -493,7 +496,7 @@ graphs. Every edge has a probability $p = \frac{2i}{2^i}$ to exist. I chose
 $k = i$. Recall that $k$ is the size of set being maintained for each
 finger. In the python source code, $k$ shows up as $fk$.
 
-![gnp all fingers results]({filename}images/conv_gnp_all_fingers_results.svg)
+![gnp all fingers results](conv_gnp_all_fingers_results.svg)
 
 Results for Random Erdos-Renyi networks. Horizontal axis is $i$. Vertical
 axis is the average network path length to the best finger candidate.
@@ -529,7 +532,7 @@ grid networks of estimated sizes $n=2^i$ for $i \in \{ 6,7,8,9,10\}$. (The
 sizes are estimated because a square grid has to be of size $m\times m$. I
 chose $m$ to be the integral part of $\sqrt{n}$.
 
-![grid all fingers results]({filename}images/conv_grid_all_fingers_results.svg)
+![grid all fingers results](conv_grid_all_fingers_results.svg)
 
 Results for grid networks. Horizontal axis is $i$. Vertical axis is the
 average network path length to the best finger candidate.
