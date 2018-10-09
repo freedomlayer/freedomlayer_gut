@@ -1,6 +1,8 @@
-Title: Sqrt(n) mesh routing
-Date: 2014-12-01 20:22
-Author: real
++++
+title = "Sqrt(n) mesh routing"
+description = ""
+date = 2014-12-01
++++
 
 <!--
 ceil and floor latex macros:
@@ -37,7 +39,7 @@ neighbours, we might need to transfer the message through some intermediate
 nodes until it finally reaches its destination, $b$.
 
 In [The mesh question
-article]({filename}/articles/freedomlayer/mesh_question/mesh_question.mdown) we already
+article](./research/mesh_question) we already
 discussed the
 [flooding](http://en.wikipedia.org/wiki/Flooding_%28computer_networking%29)
 solution. We have seen that it works, but it is not very efficient: Every
@@ -54,7 +56,7 @@ If a node $x$ knows a path to some other node $y$, $x$ could send
 messages to $y$ through that path, assuming that all the nodes on that path
 cooperate.
 
-![Path from x to y]({filename}images/path_x_to_y.svg)
+![Path from x to y](path_x_to_y.svg)
 
 In the picture: Nodes are are blue points. Immediate links between nodes are
 drawn as black lines. The green lines mark a chosen path of links between the
@@ -89,7 +91,7 @@ they know $b$ (As their virtual neighbour). One of $a$'s virtual
 neighbours, $z$, should have $b$ as a virtual neighbour. Then we could send
 a message to $z$, and $z$ will forward that message to $b$.
 
-![Z Common virtual neighbour]({filename}images/z_common_virtual_neighbour.svg)
+![Z Common virtual neighbour](z_common_virtual_neighbour.svg)
 
 In the picture: $a$ and $b$ are two nodes in the network. The lines from
 $a$ and $b$ are paths to virtual neighbours of $a$ and $b$. $z$ is
@@ -153,7 +155,7 @@ One approach to get a random virtual neighbour is **random walking**. Random
 walking in a graph (Or a network) means that we begin from some node, and in
 every iteration we pick a neighbour randomly, and move to that neighbour.
 
-![A random walk in a graph]({filename}images/random_walk_graph.svg)
+![A random walk in a graph](random_walk_graph.svg)
 
 In the picture: An example for a random walk on a graph. Follow the numbers to
 get a feeling of the random walk. (Begin from 1). Note that some vertices have
@@ -250,7 +252,7 @@ networks are fast mixing. (There are many articles about it, just search for
 looks like a grid (This could happen if we just connect close devices using
 wireless), it is probably not very fast mixing.
 
-![Random Graph]({filename}images/random_graph.svg)
+![Random Graph](random_graph.svg)
 
 In the picture: An
 [Erdos-Renyi](http://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model)
@@ -260,7 +262,7 @@ browse for the code [here
 [github]](https://github.com/realcr/freedomlayer_code).
 
 
-![A grid graph]({filename}images/grid.svg)
+![A grid graph](grid.svg)
 
 A grid is an example of a non fast mixing graph.
 
