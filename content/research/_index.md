@@ -66,7 +66,7 @@ efficient Internet. We collect here articles about the subject.
     research/unified_challenge_response)
 
 -   [A bound for Universal Routing on trees [pdf]](
-    {filename}/articles/assets/bounds_universal_tree_routing.pdf)
+    articles/bounds_universal_tree_routing.pdf)
 
 -   [Approximating the size of a mesh network](
     research/approximate_net_size)
