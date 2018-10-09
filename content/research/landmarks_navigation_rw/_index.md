@@ -1,6 +1,8 @@
-Title: Landmarks Navigation by Random Walking
-Date: 2014-12-23 19:19
-Author: real
++++
+title = "Landmarks Navigation by Random Walking"
+description = ""
+date = 2014-12-23
++++
 
 <!--
 abs function.
@@ -36,11 +38,10 @@ Given a mesh network, we want to be able to send a message between two
 arbitrary nodes. We have already presented several possible solutions:
 [flooding](http://en.wikipedia.org/wiki/Flooding_%28computer_networking%29),
 [$\sqrt{n}$ mesh
-routing]({filename}/articles/freedomlayer/sqrt_n_routing/sqrt_n_routing.mdown), [Virtual
-DHT
-routing]({filename}/articles/freedomlayer/exp_virtual_dht_routing/exp_virtual_dht_routing.mdown)
+routing](./research/sqrt_n_routing/_index.md), [Virtual
+DHT routing](./research/exp_virtual_dht_routing/_index.md)
 and the [Distributed Post
-Office]({filename}/articles/freedomlayer/dist_post_office/dist_post_office.mdown).
+Office](./research/dist_post_office/_index.md).
 
 We can look at this question from another perspective: How can
 a message inside the network navigate itself to a given destination?
@@ -95,7 +96,7 @@ We don't know if this specific configuration happens in real mesh networks, but
 it seems to be very specific, so we will assume that generally it doesn't
 happen for the rest of this text.
 
-![GPS Fails Long Links]({filename}images/gps_fails_long_links.svg)
+![GPS Fails Long Links](gps_fails_long_links.svg)
 
 In the picture: $x$ routes a message to $y$ using GPS coordinates. As $y$
 is at the north, it seems reasonable to route the message to northern nodes.
@@ -126,7 +127,7 @@ satellites and find out how far you are from those satellites. Using the
 obtained set of distances (And some information about current time and course
 of those satellites), you can calculate where you are.
 
-![Satellites Distances]({filename}images/satellites_distances.svg)
+![Satellites Distances](satellites_distances.svg)
 
 A very schematic illustration of finding location by data from a few
 satellites.
@@ -149,7 +150,7 @@ network, to allow messages find their way in the network.
 <h5>The Landmarks</h5>
 
 In the end of [The Distributed Post
-Office]({filename}/articles/freedomlayer/dist_post_office/dist_post_office.mdown) article
+Office](./research/dist_post_office/_index.md) article
 we mentioned the idea of
 Landmarks. Given a network of $n$ nodes, we choose a set of $k$ nodes to be
 landmarks: $\{l_1,l_2,\dots,l_k\}$. (Those are just regular nodes that were
@@ -203,7 +204,7 @@ message to each of the landmarks that asks them to prove their identity (The
 message will be sent along the shortest path known to $x$). In return, the
 landmarks will respond with a proof that they are alive.
 
-![Landmarks Challenge Response]({filename}images/landmarks_challenge_response.svg)
+![Landmarks Challenge Response](landmarks_challenge_response.svg)
 
 $x$ sends a challenge message to one of the landmarks
 ($l_3$) through a shortest path. $x$ then waits for a proof of identity
@@ -227,7 +228,7 @@ $$Coord(x) = (c_x^1,\dots,c_x^k) := (dist(x,l_1),\dots,dist(x,l_k))$$
 
 and we call it **$x$'s network coordinate**.
 
-![Network Coordinates]({filename}images/network_coordinate.svg)
+![Network Coordinates](network_coordinate.svg)
 
 The picture illustrates network coordinates. 
 $x$ maintains a shorest path to each of the landmarks
@@ -267,7 +268,7 @@ contradiction](http://en.wikipedia.org/wiki/Proof_by_contradiction). Assume
 path between $x$ and $l_j$ is two hops longer than the shortest path between
 $y$ and $l_j$. 
 
-![Coord continuity]({filename}images/coord_continuity.svg)
+![Coord continuity](coord_continuity.svg)
 
 Illustration of $c_x^j$ and $c_y^j$.
 
@@ -317,7 +318,7 @@ In particular, this means that not every coordinate is valid. Some combinations
 of numbers can never form a network coordinate. (With respect to a given set of
 landmarks and distances between landmarks).
 
-![Coordinates triangle inequality]({filename}images/coord_triangle_ineq.svg)
+![Coordinates triangle inequality](coord_triangle_ineq.svg)
 
 Illustration of the triangle inequality for network
 coordinates.
@@ -344,7 +345,7 @@ possible that $Coord(x) = Coord(y)$?
 The answer is yes. It is possible to construct a network where $x,y$ are two
 different nodes, but $Coord(x) = Coord(y)$.
 
-![Non unique coordinates]({filename}images/nonunique_coords.svg)
+![Non unique coordinates](nonunique_coords.svg)
 
 Example of different nodes having the same network
 coordinate. Blue dots are regular nodes. Green dots are landmarks. Note that
@@ -676,7 +677,7 @@ you might have an idea.
 <h6>Measuring network load</h6>
 
 In the [Distributed Post
-Office]({filename}/articles/freedomlayer/dist_post_office/dist_post_office.mdown) we
+Office](./research/dist_post_office/_index.md) we
 managed to route messages very efficiently, however all the messages were
 routed through a few specific nodes. This is unacceptable for large distributed
 mesh networks.
