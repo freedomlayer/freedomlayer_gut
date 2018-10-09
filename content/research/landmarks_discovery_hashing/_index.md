@@ -1,6 +1,8 @@
-Title: Node coordinate discovery by uniform hashing
-Date: 2017-06-22 10:50
-Author: real
++++
+title = "Node coordinate discovery by uniform hashing"
+description = ""
+date = 2017-06-22 
++++
 
 ### Abstract
 
