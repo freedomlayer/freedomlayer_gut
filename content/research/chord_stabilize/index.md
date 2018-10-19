@@ -15,7 +15,7 @@ $$
 
 <h3>Abstract</h3>
 
-In the [Intro to DHTs](./research/dht_intro/_index.md)
+In the [Intro to DHTs](./research/dht_intro/index.md)
 article we presented a very basic idea of the chord DHT (See also [original
 article](http://pdos.csail.mit.edu/papers/chord:sigcomm01/chord_sigcomm.pdf)
  and generally how to search it. We treated it pretty much as a static network
@@ -245,7 +245,7 @@ ring.
 In the picture: An example ring with $k = 2$. In this network one failed node
 will be fixed quickly.
 
-We have already discussed this structure in [Intro to DHTs](./research/dht_intro/_index.md)
+We have already discussed this structure in [Intro to DHTs](./research/dht_intro/index.md)
 as a naive approach for increasing search speed. This time we want to use this
 structure to make the network more resilient to network churn.
 

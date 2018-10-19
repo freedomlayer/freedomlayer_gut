@@ -32,7 +32,7 @@ $y$.
 
 Recall that landmarks based routing (Using random walking) was discussed
 earlier in: [Landmarks navigation by random walking](
-./research/landmarks_navigation_rw/_index.md).
+./research/landmarks_navigation_rw/index.md).
 
 We use the network coordinates to approximate distances between nodes in the
 network. This should help us with routing messages between nodes.
@@ -52,7 +52,7 @@ different coordinates $C \neq D$.
 ## Using lookahead
 
 In [Landmarks navigation by random walking](
-./research/landmarks_navigation_rw/_index.md)
+./research/landmarks_navigation_rw/index.md)
 we ran an experiment of routing with network coordinates, relying on a random
 walk. It didn't gave us very good results.
 
@@ -81,7 +81,7 @@ of proving this.
 
 The following experiment is used to check the performance of landmarks routing
 with lookahead, and compare its performance with chord [Virtual DHT
-routing](./research/exp_virtual_dht_routing/_index.md).
+routing](./research/exp_virtual_dht_routing/index.md).
 Also see [A globally connected overlay for Virtual Ring Routing [pdf]](/articles/chord_connected_routing.pdf).
 
 How to read this table? 

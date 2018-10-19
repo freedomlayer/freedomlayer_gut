@@ -15,7 +15,7 @@ problem, and explain why it won't do.
 
 <h3>Motivation for change</h3>
 
-In [Intro to the Internet](./research/intro_internet/_index.md)
+In [Intro to the Internet](./research/intro_internet/index.md)
 we generally discussed how the internet works, and some of the drawbacks of the
 current situation. I remind you the main ones: 
 

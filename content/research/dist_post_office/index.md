@@ -183,10 +183,10 @@ deliver messages between every two arbitrary nodes?
 Note that we already tried to solve this question using
 [flooding](http://en.wikipedia.org/wiki/Flooding_%28computer_networking%29),
 [$sqrt{n}$
-routing](./research/sqrt_n_routing/_index.md)
+routing](./research/sqrt_n_routing/index.md)
 and
 [Virtual DHT
-routing](./research/exp_virtual_dht_routing/_index.md).
+routing](./research/exp_virtual_dht_routing/index.md).
 
 Instead of checking the height of people, we can use some other properties of
 nodes. We will use some [public key

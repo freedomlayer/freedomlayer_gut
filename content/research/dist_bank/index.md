@@ -618,7 +618,7 @@ computation or communication).
 Assuming that we have some kind of efficient communication infrastructure, we
 can arrange the supernodes into a DHT in order to achieve this kind of
 hierarchy. We are going to use the [Chord
-DHT](./research/dht_intro/_index.md) here.
+DHT](./research/dht_intro/index.md) here.
 Recall that a DHT is a structure where every participant is directly connected
 to a logarithmic amount of other participants. In addition, every participant
 can reach another participant using logarithmic amount of hops.

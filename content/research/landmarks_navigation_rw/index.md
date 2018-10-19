@@ -38,10 +38,10 @@ Given a mesh network, we want to be able to send a message between two
 arbitrary nodes. We have already presented several possible solutions:
 [flooding](http://en.wikipedia.org/wiki/Flooding_%28computer_networking%29),
 [$\sqrt{n}$ mesh
-routing](./research/sqrt_n_routing/_index.md), [Virtual
-DHT routing](./research/exp_virtual_dht_routing/_index.md)
+routing](./research/sqrt_n_routing/index.md), [Virtual
+DHT routing](./research/exp_virtual_dht_routing/index.md)
 and the [Distributed Post
-Office](./research/dist_post_office/_index.md).
+Office](./research/dist_post_office/index.md).
 
 We can look at this question from another perspective: How can
 a message inside the network navigate itself to a given destination?
@@ -150,7 +150,7 @@ network, to allow messages find their way in the network.
 <h5>The Landmarks</h5>
 
 In the end of [The Distributed Post
-Office](./research/dist_post_office/_index.md) article
+Office](./research/dist_post_office/index.md) article
 we mentioned the idea of
 Landmarks. Given a network of $n$ nodes, we choose a set of $k$ nodes to be
 landmarks: $\{l_1,l_2,\dots,l_k\}$. (Those are just regular nodes that were
@@ -677,7 +677,7 @@ you might have an idea.
 <h6>Measuring network load</h6>
 
 In the [Distributed Post
-Office](./research/dist_post_office/_index.md) we
+Office](./research/dist_post_office/index.md) we
 managed to route messages very efficiently, however all the messages were
 routed through a few specific nodes. This is unacceptable for large distributed
 mesh networks.

@@ -24,14 +24,14 @@ efficient greedy routing.
 ## Previous attempts
 
 In [Experimenting with Virtual DHT
-Routing](./research/exp_virtual_dht_routing/_index.md)
+Routing](./research/exp_virtual_dht_routing/index.md)
 we have presented an iterative distributed algorithm that allows each node $x$
 to maintain contact with a few key nodes that are close to $x \pm 2^t$. We used
 experiments to show that this algorithm can work in some cases, but we didn't
 provide any rigorous proof for those claims.
 
 In [About cycles in stationary states of VDHT routing
-algorithms](./research/vdht_cycles_rounds/_index.md)
+algorithms](./research/vdht_cycles_rounds/index.md)
 we presented a slightly different iterative distributed algorithm, IterF, that
 also allows each node $x$ to maintain contact to a few key nodes that are close
 to $x \pm 2^t$. 
@@ -99,7 +99,7 @@ $\overleftarrow{x_{2^t}}$, because it is closer to $x+2^t$ from the left
 Thus it must be true that $\overleftarrow{y_{-2^k}} = \overleftarrow{x_{2^t}}$.
 
 By the Locality lemma (see [About cycles in stationary states of VDHT routing
-algorithms](./research/vdht_cycles_rounds/_index.md))
+algorithms](./research/vdht_cycles_rounds/index.md))
 there is a direct path between $x$ and $\overleftarrow{x_{2^t}}$, and so $x$ and
 $\overleftarrow{x_{2^t}}$ must be on the same cycle. In the same way, there is a
 direct path between $\overleftarrow{y_{-2^k}}$ to $y$, therefore
