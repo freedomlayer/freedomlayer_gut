@@ -33,14 +33,15 @@
         {% block content %}
             {% block header %}
                 {% if config.extra.site_menu %}
-                    <header>
-                        <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                    <header id="navbar-header">
+                        <nav id="navbar" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                            <h1>{{ config.extra.site_name }}</h1>
                         {% for item in config.extra.site_menu %}
                             <a itemprop="url"
                                class="{% if item.url | replace(from="$BASE_URL", to=config.base_url) == current_url %}active{% endif %}"
                                href="{{ item.url | safe | replace(from="$BASE_URL", to=config.base_url) }}">
                                 <span itemprop="name">{{ item.name }}
-                                </span></a> |
+                                </span></a></br>
                         {% endfor %}
                         </nav>
                     </header>
