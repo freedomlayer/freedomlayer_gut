@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+echo $CURDIR
+S3_BUCKET=freedomlayer.org
+OUTPUTDIR=${CURDIR}/public
+
+s3cmd sync ${OUTPUTDIR}/ s3://${S3_BUCKET} --acl-public --delete-removed \
+        --no-mime-magic
