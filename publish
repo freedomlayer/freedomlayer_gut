@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+# Sync the output of this website with the s3 bucket on Amazon.
+# This will publish the website. Done using s3cmd util.
+
+# See 
+# https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
+# For explanation about this trick to get current directory:
 CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-echo $CURDIR
+
 S3_BUCKET=freedomlayer.org
 OUTPUTDIR=${CURDIR}/public
 
+# Sync using s3cmd:
 s3cmd sync ${OUTPUTDIR}/ s3://${S3_BUCKET} --acl-public --delete-removed \
         --no-mime-magic
