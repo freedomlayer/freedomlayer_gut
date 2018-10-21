@@ -573,8 +573,9 @@ The code could be obtained [here
 If you want to run it, make sure that you have networkx installed. It could be
 installed by running:
 
-    :::
-    pip install networkx
+```bash
+pip install networkx
+```
 
 There are a few files in the landmarks_navigation_rw folder. The file
 graph_coord.py is the main graph coordinates library. It contains GraphCoord
@@ -602,26 +603,27 @@ using the random walk method.
 
 These are the results: 
 
-    :::
-    Random walking using odist
-    ---------------------------
-    ||| graph generation func = gen_gnp_graph
-    ||| i's range = range(6, 16)
-    ||| num_messages = 32
-    ||| base =  22
+```
+Random walking using odist
+---------------------------
+||| graph generation func = gen_gnp_graph
+||| i's range = range(6, 16)
+||| num_messages = 32
+||| base =  22
 
-     i   | k      | Avg num hops    | Max Node Visits  | Max Coord Occur  
-    ----------------------------------------------------------------------
-       6 |     36 |        2.687500 |                5 |               1 
-       7 |     49 |        3.031250 |                5 |               1 
-       8 |     64 |        3.562500 |                4 |               1 
-       9 |     81 |        5.781250 |                4 |               1 
-      10 |    100 |       10.281250 |                6 |               1 
-      11 |    121 |       15.437500 |                6 |               1 
-      12 |    144 |       29.593750 |               12 |               1 
-      13 |    169 |       34.531250 |                8 |               1 
-      14 |    196 |       41.000000 |                7 |               1 
-      15 |    225 |       53.593750 |                8 |               1 
+ i   | k      | Avg num hops    | Max Node Visits  | Max Coord Occur  
+----------------------------------------------------------------------
+   6 |     36 |        2.687500 |                5 |               1 
+   7 |     49 |        3.031250 |                5 |               1 
+   8 |     64 |        3.562500 |                4 |               1 
+   9 |     81 |        5.781250 |                4 |               1 
+  10 |    100 |       10.281250 |                6 |               1 
+  11 |    121 |       15.437500 |                6 |               1 
+  12 |    144 |       29.593750 |               12 |               1 
+  13 |    169 |       34.531250 |                8 |               1 
+  14 |    196 |       41.000000 |                7 |               1 
+  15 |    225 |       53.593750 |                8 |               1 
+```
 
 
 How to read this output?
@@ -698,52 +700,53 @@ $x$. (Note that a message might pass more than once through $x$).
 
 The relevant code is inside measure_load_odist.py. Here are the results:
 
-    :::
-    ||| graph generation func = gen_gnp_graph
-    ||| i = 14
-    ||| num_messages = 4096
-    ||| base =  22
+```python
+||| graph generation func = gen_gnp_graph
+||| i = 14
+||| num_messages = 4096
+||| base =  22
 
-    Generating graph...
-    Generating coordinates...
-    Simulating messages delivery...
+Generating graph...
+Generating coordinates...
+Simulating messages delivery...
 
-    most commonly visited nodes:
+most commonly visited nodes:
 
-     node            | Times visited   
-    -----------------------------------
-     1689            |              51 
-     15541           |              47 
-     13284           |              45 
-     11387           |              44 
-     8423            |              43 
-     4256            |              41 
-     6428            |              41 
-     5203            |              40 
-     13389           |              40 
-     15753           |              40 
-     6618            |              39 
-     999             |              37 
-     7084            |              37 
-     9790            |              37 
-     12962           |              37 
-     1308            |              36 
-     1548            |              36 
-     5301            |              36 
-     5592            |              36 
-     9701            |              36 
-     16201           |              36 
-     573             |              35 
-     1339            |              35 
-     2628            |              35 
-     4451            |              35 
-     4615            |              35 
-     7415            |              35 
-     7492            |              35 
-     7720            |              35 
-     10367           |              35 
-     12390           |              35 
-     12492           |              35 
+ node            | Times visited   
+-----------------------------------
+ 1689            |              51 
+ 15541           |              47 
+ 13284           |              45 
+ 11387           |              44 
+ 8423            |              43 
+ 4256            |              41 
+ 6428            |              41 
+ 5203            |              40 
+ 13389           |              40 
+ 15753           |              40 
+ 6618            |              39 
+ 999             |              37 
+ 7084            |              37 
+ 9790            |              37 
+ 12962           |              37 
+ 1308            |              36 
+ 1548            |              36 
+ 5301            |              36 
+ 5592            |              36 
+ 9701            |              36 
+ 16201           |              36 
+ 573             |              35 
+ 1339            |              35 
+ 2628            |              35 
+ 4451            |              35 
+ 4615            |              35 
+ 7415            |              35 
+ 7492            |              35 
+ 7720            |              35 
+ 10367           |              35 
+ 12390           |              35 
+ 12492           |              35 
+```
 
 
 The table shown in the output is the set of most commonly visited nodes. It
@@ -777,26 +780,27 @@ have the same probability of being chosen.
 
 The code is at random_walk_naive.py. These are the results:
 
-    :::
-    Naive random walking
-    ---------------------------
-    ||| graph generation func = gen_gnp_graph
-    ||| i's range = range(6, 16)
-    ||| num_messages = 32
-    ||| base =  1
+```
+Naive random walking
+---------------------------
+||| graph generation func = gen_gnp_graph
+||| i's range = range(6, 16)
+||| num_messages = 32
+||| base =  1
 
-     i   | k      | Avg num hops    | Max Node Visits  | Max Coord Occur  
-    ----------------------------------------------------------------------
-       6 |     36 |       71.593750 |               59 |               1 
-       7 |     49 |      172.187500 |              103 |               1 
-       8 |     64 |      326.343750 |               82 |               1 
-       9 |     81 |      449.625000 |               68 |               1 
-      10 |    100 |      884.781250 |               61 |               1 
-      11 |    121 |     2719.187500 |               85 |               1 
-      12 |    144 |     3449.906250 |               58 |               1 
-      13 |    169 |    10169.531250 |               88 |               1 
-      14 |    196 |    18943.343750 |               82 |               1 
-      15 |    225 |    36732.375000 |               78 |               1 
+ i   | k      | Avg num hops    | Max Node Visits  | Max Coord Occur  
+----------------------------------------------------------------------
+   6 |     36 |       71.593750 |               59 |               1 
+   7 |     49 |      172.187500 |              103 |               1 
+   8 |     64 |      326.343750 |               82 |               1 
+   9 |     81 |      449.625000 |               68 |               1 
+  10 |    100 |      884.781250 |               61 |               1 
+  11 |    121 |     2719.187500 |               85 |               1 
+  12 |    144 |     3449.906250 |               58 |               1 
+  13 |    169 |    10169.531250 |               88 |               1 
+  14 |    196 |    18943.343750 |               82 |               1 
+  15 |    225 |    36732.375000 |               78 |               1 
+```
 
 
 Note that the average amount of hops is much larger in this case. This means

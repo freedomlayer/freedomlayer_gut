@@ -422,8 +422,9 @@ network. It can be found [here
 To run this code, you will need the python package **networkx**. I could be
 installed as follows:
 
-    :::
-    pip install networkx
+```bash
+pip install networkx
+```
 
 If you want to change any parameter in the code, check out the go() function.
 All the parameters are there.
@@ -447,35 +448,36 @@ largest amount of messages. Those are the mediators that had the highest load.
 These are the results for a two dimensional grid graph of about $2^{12}$
 nodes, and simulation of $2^{16}$ messages.
 
-    :::
-    ||| i = 12
-    ||| num_hashes = 1
-    ||| ident_bits = 32
-    Generating graph...
-    Generating Network...
-    Calculating specials...
-    Simulating 65536 messages delivery...
+```
+||| i = 12
+||| num_hashes = 1
+||| ident_bits = 32
+Generating graph...
+Generating Network...
+Calculating specials...
+Simulating 65536 messages delivery...
 
-    most common mediators:
+most common mediators:
 
-     mediator index  | ratio      | messages routed 
-    ------------------------------------------------
-                 565 |   0.507568 |           33264 
-                3251 |   0.210510 |           13796 
-                3661 |   0.078995 |            5177 
-                1573 |   0.058914 |            3861 
-                3724 |   0.031265 |            2049 
-                1806 |   0.022171 |            1453 
-                3333 |   0.018906 |            1239 
-                1341 |   0.006180 |             405 
-                 159 |   0.006027 |             395 
-                1884 |   0.005585 |             366 
-                2047 |   0.005035 |             330 
-                 978 |   0.003891 |             255 
-                3109 |   0.003662 |             240 
-                 377 |   0.002518 |             165 
-                  26 |   0.002228 |             146 
-                2269 |   0.001862 |             122 
+ mediator index  | ratio      | messages routed 
+------------------------------------------------
+             565 |   0.507568 |           33264 
+            3251 |   0.210510 |           13796 
+            3661 |   0.078995 |            5177 
+            1573 |   0.058914 |            3861 
+            3724 |   0.031265 |            2049 
+            1806 |   0.022171 |            1453 
+            3333 |   0.018906 |            1239 
+            1341 |   0.006180 |             405 
+             159 |   0.006027 |             395 
+            1884 |   0.005585 |             366 
+            2047 |   0.005035 |             330 
+             978 |   0.003891 |             255 
+            3109 |   0.003662 |             240 
+             377 |   0.002518 |             165 
+              26 |   0.002228 |             146 
+            2269 |   0.001862 |             122 
+```
 
 How to read this table? Mediator index is a unique number that identifies the
 node used as a mediator. In our code, every node has a unique number. This
@@ -496,35 +498,36 @@ nodes, and $p = (2\cdot 12)/{2^{12}}$ (This is the probability for every
 edge in the graph to exist). Again we simulate the delivery of $2^{16}$
 messages.
 
-    :::
-    ||| i = 12
-    ||| num_hashes = 1
-    ||| ident_bits = 32
-    Generating graph...
-    Generating Network...
-    Calculating specials...
-    Simulating 65536 messages delivery...
+```
+||| i = 12
+||| num_hashes = 1
+||| ident_bits = 32
+Generating graph...
+Generating Network...
+Calculating specials...
+Simulating 65536 messages delivery...
 
-    most common mediators:
+most common mediators:
 
-     mediator index  | ratio      | messages routed 
-    ------------------------------------------------
-                3425 |   0.918594 |           60201 
-                2300 |   0.029877 |            1958 
-                3935 |   0.012985 |             851 
-                3232 |   0.006516 |             427 
-                2453 |   0.005585 |             366 
-                 767 |   0.004410 |             289 
-                2281 |   0.003174 |             208 
-                 943 |   0.002869 |             188 
-                 457 |   0.002625 |             172 
-                2189 |   0.002319 |             152 
-                3682 |   0.001694 |             111 
-                3215 |   0.001648 |             108 
-                 641 |   0.001144 |              75 
-                1049 |   0.000565 |              37 
-                3469 |   0.000534 |              35 
-                 782 |   0.000519 |              34 
+ mediator index  | ratio      | messages routed 
+------------------------------------------------
+            3425 |   0.918594 |           60201 
+            2300 |   0.029877 |            1958 
+            3935 |   0.012985 |             851 
+            3232 |   0.006516 |             427 
+            2453 |   0.005585 |             366 
+             767 |   0.004410 |             289 
+            2281 |   0.003174 |             208 
+             943 |   0.002869 |             188 
+             457 |   0.002625 |             172 
+            2189 |   0.002319 |             152 
+            3682 |   0.001694 |             111 
+            3215 |   0.001648 |             108 
+             641 |   0.001144 |              75 
+            1049 |   0.000565 |              37 
+            3469 |   0.000534 |              35 
+             782 |   0.000519 |              34 
+```
 
 
 It can be seen that there is a main difference between the results of the
@@ -568,35 +571,36 @@ Let's look at some run results with more than one hash function.
 We show here the results for an Erdos-Renyi network with $2^{12}$ nodes, and
 $p = (2\cdot 12)/2^{12}$. We use $4$ hash functions:
 
-    :::
-    ||| i = 12
-    ||| num_hashes = 4
-    ||| ident_bits = 32
-    Generating graph...
-    Generating Network...
-    Calculating specials...
-    Simulating 65536 messages delivery...
+```
+||| i = 12
+||| num_hashes = 4
+||| ident_bits = 32
+Generating graph...
+Generating Network...
+Calculating specials...
+Simulating 65536 messages delivery...
 
-    most common mediators:
+most common mediators:
 
-     mediator index  | ratio      | messages routed 
-    ------------------------------------------------
-                3685 |   0.189270 |           12404 
-                2935 |   0.189026 |           12388 
-                2010 |   0.187103 |           12262 
-                3136 |   0.186569 |           12227 
-                2466 |   0.025085 |            1644 
-                3546 |   0.021988 |            1441 
-                3886 |   0.021057 |            1380 
-                1330 |   0.015961 |            1046 
-                2039 |   0.010941 |             717 
-                 400 |   0.010269 |             673 
-                 761 |   0.009781 |             641 
-                1057 |   0.008957 |             587 
-                 502 |   0.006882 |             451 
-                2890 |   0.006760 |             443 
-                2487 |   0.005554 |             364 
-                3204 |   0.005341 |             350 
+ mediator index  | ratio      | messages routed 
+------------------------------------------------
+            3685 |   0.189270 |           12404 
+            2935 |   0.189026 |           12388 
+            2010 |   0.187103 |           12262 
+            3136 |   0.186569 |           12227 
+            2466 |   0.025085 |            1644 
+            3546 |   0.021988 |            1441 
+            3886 |   0.021057 |            1380 
+            1330 |   0.015961 |            1046 
+            2039 |   0.010941 |             717 
+             400 |   0.010269 |             673 
+             761 |   0.009781 |             641 
+            1057 |   0.008957 |             587 
+             502 |   0.006882 |             451 
+            2890 |   0.006760 |             443 
+            2487 |   0.005554 |             364 
+            3204 |   0.005341 |             350 
+```
 
 
 We can see from the results that the first $4$ most common mediator nodes

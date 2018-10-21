@@ -479,8 +479,9 @@ to understand and change.
 You will need the **networkx** library to run this code. It could be obtained
 by running:
 
-    :::python
-    pip install networkx
+```bash
+pip install networkx
+```
 
 Let's begin with a quick summary of the results. 
 
@@ -554,33 +555,34 @@ Most of the things you will want to change are probably inside the go()
 function. This is where you put the parameters for the simulation. This is how
 it should look like:
 
-    :::python
-    def go():
-        i = 11
-        ident_bits = math.ceil(i*2.6)
-        fk = i
-        # Fingers we are interested in:
-        succ_fingers = list(range(ident_bits))
-        pred_fingers = list(range(ident_bits))
-        # succ_fingers = [0]
-        # pred_fingers = [0]
+```python
+def go():
+    i = 11
+    ident_bits = math.ceil(i*2.6)
+    fk = i
+    # Fingers we are interested in:
+    succ_fingers = list(range(ident_bits))
+    pred_fingers = list(range(ident_bits))
+    # succ_fingers = [0]
+    # pred_fingers = [0]
 
-        print("||| i =",i)
-        print("||| ident_bits =",ident_bits)
-        print("||| fk =",fk)
-        print("||| succ_fingers = ",succ_fingers)
-        print("||| pred_fingers = ",pred_fingers)
+    print("||| i =",i)
+    print("||| ident_bits =",ident_bits)
+    print("||| fk =",fk)
+    print("||| succ_fingers = ",succ_fingers)
+    print("||| pred_fingers = ",pred_fingers)
 
-        print("Generating graph...")
-        g = gen_grid_graph(i)
-        # g = gen_gnp_graph(i)
-        print("Generating Network...")
-        vd = VirtualDHT(graph=g,fk=fk,\
-                dht_fingers=(succ_fingers,pred_fingers),\
-                ident_bits=ident_bits)
+    print("Generating graph...")
+    g = gen_grid_graph(i)
+    # g = gen_gnp_graph(i)
+    print("Generating Network...")
+    vd = VirtualDHT(graph=g,fk=fk,\
+            dht_fingers=(succ_fingers,pred_fingers),\
+            ident_bits=ident_bits)
 
-        print("Initiating convergence...\n")
-        vd.converge(max_iters=0x80)
+    print("Initiating convergence...\n")
+    vd.converge(max_iters=0x80)
+```
 
 **i** is a parameter that represents the size of a network. For a given value
 i, we say that the size of the network is $n=2^i$.

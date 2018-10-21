@@ -256,24 +256,25 @@ people.
 
 This is the code used to obtain this result (Python3):
 
-    :::python
-    import math
+```python
+import math
 
-    def calc_bad_prob(r,alpha,beta):
-        """
-        r - Size of a subset.
-        alpha - Probability of a node to be bad.
-        beta - Amount of bad nodes in a subset to turn it into a bad subset.
+def calc_bad_prob(r,alpha,beta):
+    """
+    r - Size of a subset.
+    alpha - Probability of a node to be bad.
+    beta - Amount of bad nodes in a subset to turn it into a bad subset.
 
-        Calculate upper bound for Pr[X > beta*r] using the Chernoff bound.
-        This calculation assumes infinite sampling population.
-        """
-        delta = (beta - alpha) / alpha
-        miu = alpha * r # miu = E[x]
+    Calculate upper bound for Pr[X > beta*r] using the Chernoff bound.
+    This calculation assumes infinite sampling population.
+    """
+    delta = (beta - alpha) / alpha
+    miu = alpha * r # miu = E[x]
 
-        bound = (math.exp(delta) / ((1 + delta)**(1 + delta))) ** miu
+    bound = (math.exp(delta) / ((1 + delta)**(1 + delta))) ** miu
 
-        return bound
+    return bound
+```
 
 
 The above choice of the number $1/3$ was not arbitrary. There is a family of
