@@ -11,6 +11,10 @@ CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 S3_BUCKET=freedomlayer.org
 OUTPUTDIR=${CURDIR}/public
 
+# Create a release version of the website.
+# Note: If uploaded with the output files of gutenberg publish, the website will not work properly.
+gutenberg build
+
 # Sync using s3cmd:
 s3cmd sync ${OUTPUTDIR}/ s3://${S3_BUCKET} --acl-public --delete-removed \
         --no-mime-magic
