@@ -10,4 +10,4 @@ decentralized technologies.
 
 Don't be shy to drop a line at:
 
-![email](./email.png)
+![real (at) this domain](email.png)
