@@ -30,6 +30,7 @@
     </head>
 
     <body>
+        <div id="wrapper">
         {% block content %}
             {% block header %}
                 {% if config.extra.site_menu %}
@@ -40,8 +41,7 @@
                             <a itemprop="url"
                                class="{% if item.url | replace(from="$BASE_URL", to=config.base_url) == current_url %}active{% endif %}"
                                href="{{ item.url | safe | replace(from="$BASE_URL", to=config.base_url) }}">
-                                <span itemprop="name">{{ item.name }}
-                                </span></a></br>
+                                <span itemprop="name">{{ item.name }}</span></a></br>
                         {% endfor %}
                         </nav>
                         </br></br>
@@ -49,9 +49,12 @@
                     </header>
                 {% endif %}
             {% endblock header %}
+            <div id="custom-content">
             {% block custom_content %}
             {% endblock custom_content %}
+            </div>
         {% endblock content %}
+        </div>
     </body>
 </html>
 
