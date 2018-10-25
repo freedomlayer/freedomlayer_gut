@@ -1,6 +1,7 @@
 +++
 title = "CSwitch"
 description = ""
-date = 2018-10-23
+template = "blog_index.html"
+sort_by = "date"
 +++
 

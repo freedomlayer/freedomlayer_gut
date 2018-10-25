@@ -1,39 +1,35 @@
 {% extends "base.html" %}
+{% import "post_macros.html" as post_macros %}
 
 {% block custom_content %}
-<main>
-    {% if config.extra.after_dark_title %}
-        <header>
-            <h1>{{ config.extra.after_dark_title }}</h1>
-        </header>
-    {% endif %}
-
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">{{ section.title }}</h1>
+    </header>
     <div itemprop="articleBody">
       {{ section.content | safe }}
     </div>
-
     {% for post in section.pages %}
-      <h1><a href="{{ post.permalink }}">{{ post.title }}</a></h1>
+        <h3>({{post.date}}) <a href="{{ post.permalink }}">{{ post.title }}</a></h3>
     {% endfor %}
 
-
-    {% block page_footer %}
+    {% block section_footer %}
         <footer>
             <p>
                 {% if config.extra.author %}
                     Published by {{ config.extra.author }}
                 {% endif %}
-                {% if page.taxonomies.categories %}
-                    {% set category = page.taxonomies.categories[0] %}
+                {% if section.taxonomies.categories %}
+                    {% set category = section.taxonomies.categories[0] %}
                     in <a href="{{ get_taxonomy_url(kind="categories", name=category) | safe }}">{{ category }}</a>
                 {% endif %}
-                {% if page.taxonomies.tags %}
+                {% if section.taxonomies.tags %}
                     and tagged
-                    {% for tag in page.taxonomies.tags %}
+                    {% for tag in section.taxonomies.tags %}
                         <a href="{{ get_taxonomy_url(kind="tags", name=tag) | safe }}">{{ tag }}</a>
-                        {% if page.taxonomies.tags | length > 1 %}
-                            {% if loop.index != page.taxonomies.tags | length %}
-                                {% if loop.index == page.taxonomies.tags | length - 1 %}
+                        {% if section.taxonomies.tags | length > 1 %}
+                            {% if loop.index != section.taxonomies.tags | length %}
+                                {% if loop.index == section.taxonomies.tags | length - 1 %}
                                     and
                                 {% else %}
                                     ,
@@ -44,6 +40,7 @@
                 {% endif %}
             </p>
         </footer>
-    {% endblock page_footer %}
-</main>
+    {% endblock section_footer %}
+</article>
 {% endblock custom_content %}
+

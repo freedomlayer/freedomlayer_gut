@@ -22,5 +22,6 @@ site_name = "Freedomlayer"
 site_menu = [
     {url = "$BASE_URL", name = "Freedomlayer"},
     {url = "$BASE_URL/research", name = "Research"},
+    {url = "$BASE_URL/cswitch", name = "CSwitch"},
     {url = "$BASE_URL/about", name = "About"},
 ]
