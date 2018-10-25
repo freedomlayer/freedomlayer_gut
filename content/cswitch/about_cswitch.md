@@ -33,7 +33,7 @@ Assume that two business owners, a milkman and a baker, live next to each
 other. Also assume that they live in a world without money.
 
 One way the milkman and the baker could exchange goods without the use of money
-is using the method of barter. the milkman could ask the baker from some bread,
+is using the method of barter. The milkman could ask the baker from some bread,
 in exchange for some milk. However, what if at a specific time the milkman
 wants to get some bread from the baker, but the baker doesn't need any milk
 from the milkman? In this case, the method of barter will not allow to perform
@@ -224,7 +224,7 @@ I hope to talk about in the near future:
 - Networking: How friends in the network communicate? How to do this in a
     decentralized and secure way?
 
-- Implemenetation details: about implementing CSwitch with Rust and the Futures
+- Implementation details: about implementing CSwitch with Rust and the Futures
     asynchronous primitives.
 
 
