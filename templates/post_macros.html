@@ -1,5 +1,5 @@
 {% macro meta(page) %}
-    Published: {{ page.date | date(format="%F") }}
+    {{ page.date | date(format="%F") }}
 {% endmacro meta %}
 
 {% macro page_in_list(page) %}
