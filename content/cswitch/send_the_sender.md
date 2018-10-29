@@ -6,7 +6,7 @@ date = 2018-10-29
 
 One very cool trick I learned about Rust is the ability to send the sender part
 of a channel through another channel. It began for me as a strange experiment, but
-later I have seen it happen inside Servo's code, so I got enough confident to
+later I have seen it happen inside Servo's code, so I got confident enough to
 use this trick in my own code.
 
 I will talk only about [channels in Rust
