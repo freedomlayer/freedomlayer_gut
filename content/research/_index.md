@@ -46,7 +46,7 @@ efficient Internet. We collect here articles about the subject.
         ./research/multi_named_vdht_routing/index.md)
 
     -   [A globally connected overlay for Virtual Ring Routing [pdf]](
-        articles/chord_connected_routing.pdf)
+        /articles/chord_connected_routing.pdf)
 
 -   Landmarks based Routing:
     -   [Landmarks Navigation by Random Walking](
@@ -66,7 +66,7 @@ efficient Internet. We collect here articles about the subject.
     ./research/unified_challenge_response/index.md)
 
 -   [A bound for Universal Routing on trees [pdf]](
-    articles/bounds_universal_tree_routing.pdf)
+    /articles/bounds_universal_tree_routing.pdf)
 
 -   [Approximating the size of a mesh network](
     ./research/approximate_net_size/index.md)
