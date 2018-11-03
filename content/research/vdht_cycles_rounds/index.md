@@ -480,7 +480,7 @@ a cycle of only one round.
 
 I wrote a short piece of code (Python3) that implements some of the things
 discussed above. You can find it [here
-[github]](https://github.com/realcr/freedomlayer_code/blob/master/vdht_cycles_rounds/alg_state.py).
+[github]](https://github.com/Freedomlayer/freedomlayer_code/blob/master/vdht_cycles_rounds/alg_state.py).
 
 Basically the code generates a random $G(n,p)$ graph with $p=3\cdot\log(n)/n$
 (So that the graph is connected with high probability), and then runs IterF

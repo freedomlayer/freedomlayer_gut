@@ -28,7 +28,7 @@ is probably weakly connected, but not necessarily strongly connected.
 
 The experiments are written in [Rust](https://www.rust-lang.org) and could be
 found [here
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/connectivity_towers).
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/connectivity_towers).
 
 ## Motivation
 

@@ -383,7 +383,7 @@ I don't want you to leave empty handed (You got so far already), so I
 wrote a simple simulation for the Stabilize$^*_k$ algorithm in Python. It
 shows how Stabilize$^*_k$ can create the Far links from the Local links in
 about $O(\log(n))$ iterations. You can find it [here
-[github]](https://github.com/realcr/freedomlayer_code/blob/master/chord_stabilize/build_far_from_local.py).
+[github]](https://github.com/Freedomlayer/freedomlayer_code/blob/master/chord_stabilize/build_far_from_local.py).
 
 Some words about the code. It is not very fast. (You could optimize it though).
 On my computer you could simulate a ring of 2^10 nodes, though you will have to

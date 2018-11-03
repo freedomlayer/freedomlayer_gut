@@ -18,7 +18,7 @@ valid coordinate.
 
 The code for all the experiments is written in
 [Rust](https://www.rust-lang.org), and could be found [here [github]](
-https://github.com/realcr/freedomlayer_code/tree/master/landmarks_discovery_hashing/net_coords).
+https://github.com/Freedomlayer/freedomlayer_code/tree/master/landmarks_discovery_hashing/net_coords).
 
 
 ### Hashing node ids into coordinates
@@ -130,7 +130,7 @@ Parameters for this experiment:
   0x20000)$. (This helps with having a low `average_min_indices` value).
 
 ```bash
-git clone https://github.com/realcr/freedomlayer_code
+git clone https://github.com/Freedomlayer/freedomlayer_code
 cd landmarks_discovery_hashing/net_coords
 ```
 
@@ -287,7 +287,7 @@ We check the uniformity of the resulting generated coordinates, the same way we
 did with the previous algorithm: `randomize_coord_landmarks_coords`.
 
 ```bash
-git clone https://github.com/realcr/freedomlayer_code
+git clone https://github.com/Freedomlayer/freedomlayer_code
 cd landmarks_discovery_hashing/net_coords
 cargo run --bin randomize_coord_balanced --release
 ```
@@ -341,7 +341,7 @@ Ideally this number should be as low as possible: 1.
 Results for `randomize_coord_landmarks_coords`:
 
 ```bash
-git clone https://github.com/realcr/freedomlayer_code
+git clone https://github.com/Freedomlayer/freedomlayer_code
 cd landmarks_discovery_hashing/net_coords
 ```
 
@@ -399,7 +399,7 @@ g=11; planar  ; ni=1 |avg_path_len =   39.700 |avg_num_attempts =  2.800 |
 Results for `randomize_coord_rw_directional`:
 
 ```bash
-git clone https://github.com/realcr/freedomlayer_code
+git clone https://github.com/Freedomlayer/freedomlayer_code
 cd landmarks_discovery_hashing/net_coords
 cargo run --bin find_coords --release
 ```

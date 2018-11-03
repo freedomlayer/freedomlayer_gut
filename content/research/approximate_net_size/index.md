@@ -19,7 +19,7 @@ node ids and performing a transformation over those values.
 
 The experiments are written in [Rust](https://www.rust-lang.org) and could be
 found [here
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/approximate_net).
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/approximate_net).
 
 
 ## Hashing node ids
@@ -138,7 +138,7 @@ approximation of the network size.
 
 We wrote a basic experiment (In Rust) to check the various methods for combining minimum
 values for approximating the amount of nodes. It can be found [here
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/approximate_net).
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/approximate_net).
 
 We have tried various methods:
 

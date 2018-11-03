@@ -15,7 +15,7 @@ We describe the basic form of the Distributed Post Office, and mention two
 improvements to its structure.
 
 Next, we run some [experiments
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/dist_post_office).
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/dist_post_office).
 Our results show that the Distributed Post Office in its current form does not
 scale well as a solution for routing messages in large networks.
 
@@ -417,7 +417,7 @@ dimension.
 
 I wrote some Python3 code to check the load over the "high" nodes in the
 network. It can be found [here
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/dist_post_office)
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/dist_post_office)
 
 To run this code, you will need the python package **networkx**. I could be
 installed as follows:

@@ -10,7 +10,7 @@ We present here some experiment results for a variation of the landmarks
 routing method. Those results show that landmarks routing could be used in
 practice for efficient routing in a network.
 The experiments are written in [Rust](https://www.rust-lang.org) and could be
-found on github, [here [github]](https://github.com/realcr/freedomlayer_code/tree/master/landmarks_lookahead).
+found on github, [here [github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/landmarks_lookahead).
 
 ## A Short reminder about network coordinates
 
@@ -117,7 +117,7 @@ and put stars (`***`) in all subsequent routing experiments of the same type.
 The experiments are written in [Rust](https://www.rust-lang.org). The results are presented here.
 You can get the same results yourself by running:
 ```
-git clone https://github.com/realcr/freedomlayer_code
+git clone https://github.com/Freedomlayer/freedomlayer_code
 cd landmarks_lookahead/net_coords
 cargo run --bin full_matrix --release
 ```
@@ -252,7 +252,7 @@ experiments. This was not done at the previous experiment.
 
 You can run the following experiment by running:
 ```
-git clone https://github.com/realcr/freedomlayer_code
+git clone https://github.com/Freedomlayer/freedomlayer_code
 cd landmarks_lookahead/net_coords
 cargo run --bin landmarks_weighted_matrix --release
 ```

@@ -10,7 +10,7 @@ date = 2014-12-14
 We introduce the Virtual DHT idea for routing messages in a mesh network. We
 describe a crude algorithm that builds a Chord Virtual DHT. Next we run some
 [experiments
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/exp_virtual_dht_routing)
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/exp_virtual_dht_routing)
 to measure the algorithm's ability to create a Virtual DHT efficiently. We also
 measure the expected amount of hops required to deliver a message using this
 method. 
@@ -472,7 +472,7 @@ else.
 
 I wrote simulation code for the Fingers Convergence idea in Python3. [You can
 find it here
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/exp_virtual_dht_routing)
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/exp_virtual_dht_routing)
 It's not the fastest code out there, but it works, and it should be pretty easy
 to understand and change.
 

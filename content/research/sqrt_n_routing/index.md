@@ -258,7 +258,7 @@ In the picture: An
 random graph with $n=2^6$ and
 $p=\frac{2\cdot 6}{2^6}$. This is an example of a fast mixing graph. You can
 browse for the code [here
-[github]](https://github.com/realcr/freedomlayer_code).
+[github]](https://github.com/Freedomlayer/freedomlayer_code).
 
 
 ![A grid graph](grid.svg)

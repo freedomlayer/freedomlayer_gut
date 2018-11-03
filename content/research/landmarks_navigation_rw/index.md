@@ -24,7 +24,7 @@ Network Coordinates. We use this algorithm to route messages from a source node
 to a destination node in the network. 
 
 Next, we run some [code experiments
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/landmarks_navigation_rw)
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/landmarks_navigation_rw)
 to check the performance of the random walk algorithm. Our results show that
 this method of routing works for networks up to size of $2^{15}$ nodes. It
 will probably not scale well for much larger networks.
@@ -568,7 +568,7 @@ as described above. It is written in Python3, and relies on the networkx
 library.
 
 The code could be obtained [here
-[github]](https://github.com/realcr/freedomlayer_code/tree/master/landmarks_navigation_rw)
+[github]](https://github.com/Freedomlayer/freedomlayer_code/tree/master/landmarks_navigation_rw)
 
 If you want to run it, make sure that you have networkx installed. It could be
 installed by running:
