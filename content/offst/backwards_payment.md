@@ -193,3 +193,10 @@ earns more credits for passing funds, however, it becomes less likely that his
 long chain will be chosen by other nodes.
 
 
+## Further thoughts
+
+The backwards payment mechanism was simplified in this post, to make it easier
+to explain. One important topic that was not discussed is how to mitigate credit
+freezing attacks: A malicious node might be able to remotely freeze credits of
+another node, blocking him from processing transactions. Solving this issue
+will be discussed in the next posts.
