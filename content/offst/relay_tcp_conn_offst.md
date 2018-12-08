@@ -114,11 +114,11 @@ D then has two options. It can either reject the connection by sending back
 the connect channel with client C.
 
 D can also accept the connection by opening a new TCP connection to the
-Relay, as described in the next section (2.2). In that case, the connect
+Relay, as described in the next section (2.3). In that case, the connect
 channel opened by client C will turn into a TCP connection to the client D,
 relayed by the Relay.
 
-(2.2) The client sends `InitConnection::Accept(public_key)` to the relay:
+(2.3) The client sends `InitConnection::Accept(public_key)` to the relay:
 
 We call this kind of TCP connection an **accept channel**. This should be done
 by the client as a response to an incoming `IncomingConnection` message that
