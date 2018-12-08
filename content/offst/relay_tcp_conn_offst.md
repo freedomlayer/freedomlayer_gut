@@ -131,7 +131,7 @@ client, relayed by the relay.
 
 ## ASCII diagram
 
-Connect and Reject:
+Connect and Accept:
 
 ```
                           Relay ---------------------- D
