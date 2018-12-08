@@ -152,10 +152,6 @@ C ----------------------  Relay ---------------------- D
                                 IncomingConnection -->
 
 
-     (connect channel)             (listen channel)
-C ----------------------  Relay ---------------------- D
-                                IncomingConnection -->
-
 
      (connect channel)             (listen channel)
 C ----------------------  Relay ---------------------- D
@@ -189,10 +185,6 @@ C ----------------------  Relay ---------------------- D
 C ----------------------  Relay ---------------------- D
 InitConnection::connect -->
 
-
-     (connect channel)             (listen channel)
-C ----------------------  Relay ---------------------- D
-                                IncomingConnection -->
 
 
      (connect channel)             (listen channel)
