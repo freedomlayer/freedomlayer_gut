@@ -147,7 +147,7 @@ Another important detail is that every usage of
 resulting neighbors. It would have been nice if we could somehow return an
 Iterator from the function.
 
-## Returning `Option<impl Iterator<Item=&N>>`
+## Returning Option of impl Iterator
 
 Using the [impl trait](https://github.com/rust-lang/rfcs/blob/master/text/1522-conservative-impl-trait.md) 
 feature we can do the following:
