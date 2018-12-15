@@ -1,6 +1,6 @@
 +++
-title = "Creating an empty iterator of a certain type"
-description = "Creating an empty iterator of a certain type"
+title = "Creating an empty iterator of a certain type in Rust"
+description = "Creating an empty iterator of a certain type in Rust"
 date = 2018-12-15
 +++
 
