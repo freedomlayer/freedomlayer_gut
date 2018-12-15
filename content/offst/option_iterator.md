@@ -25,8 +25,8 @@ Example:
 A requests a route:
 
 ```
-A -> IndexServer:  RouteRequest  (A -> B, capacity >= 20)
-IndexServer -> A:  RouteResponse (A -- M1 -- M2 -- M3 -- B, capacity = 35)
+RouteRequest  (A -> IndexServer):  (A -> B, capacity >= 20)
+RouteResponse (IndexServer -> A):  (A -- M1 -- M2 -- M3 -- B, capacity = 35)
 ```
 
 Note that in the example `A` requested a route of send capacity at least `20`
