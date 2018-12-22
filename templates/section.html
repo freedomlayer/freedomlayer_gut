@@ -6,9 +6,14 @@
     <header>
         <h1 itemprop="headline">{{ section.title }}</h1>
     </header>
+
+    Subscribe to get updates: {{ post_macros::mailchimp() }}
+    <br/>
+
     <div itemprop="articleBody">
       {{ section.content | safe }}
     </div>
+
 
     {% block section_footer %}
         <footer>

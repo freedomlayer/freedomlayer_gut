@@ -11,23 +11,22 @@ pre {
         padding: 1em;
         border-radius: 10px;
         white-space: pre-wrap;
+        /*white-space: pre; */
+        /*overflow-x: auto; */
+
 }
 
 #wrapper {
         max-width: calc(76em + 1px);
         margin-top: 2em;
         margin-left: 4em;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        margin: auto;
 }
  
 #navbar-header {
-        flex: 0 1 16em;
 }
 
 #custom-content {
-        flex: 1 1;
 }
 
 #navbar {

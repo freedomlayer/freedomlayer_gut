@@ -6,11 +6,14 @@
     <header>
         <h1 itemprop="headline">{{ section.title }}</h1>
     </header>
+    Subscribe to get updates: {{ post_macros::mailchimp() }}
+    <br/>
     <div itemprop="articleBody">
       {{ section.content | safe }}
     </div>
     {% for post in section.pages %}
-        <h3>({{post.date}}) <a href="{{ post.permalink }}">{{ post.title }}</a></h3>
+        ({{post.date}}) <a href="{{ post.permalink }}">{{ post.title
+            }}</a></br></br>
     {% endfor %}
 
     {% block section_footer %}
