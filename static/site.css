@@ -10,9 +10,8 @@ body {
 pre {
         padding: 1em;
         border-radius: 10px;
-        white-space: pre-wrap;
-        /*white-space: pre; */
-        /*overflow-x: auto; */
+        /* white-space: pre-wrap; */
+        overflow-x: auto;
 
 }
 
