@@ -327,6 +327,10 @@ github](https://github.com/freedomlayer/offst/blob/6f91692cc751c3c47e2ad54ce2853
 
 ## Further reading
 
+- [Discussion on reddit](https://www.reddit.com/r/rust/comments/a6ii2e/creating_an_empty_iterator_of_a_certain_type/).
+    Contains some very interesting advice for other possible solutions. For
+    example, using `either::Either` or `res.into_iter().flat_map(|iter| iter)`.
+
 - One idea we did not explore here is the possiblity of creating a generator and
 somehow converting it to an iterator. See: [generator_to_iterator](https://users.rust-lang.org/t/a-problem-with-some-generators/12827).
 
