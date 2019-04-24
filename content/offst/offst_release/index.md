@@ -368,6 +368,7 @@ This is a good time to thank people who helped making Offst possible:
 - [Nemo157](https://github.com/Nemo157)
 - [vitalyd](https://users.rust-lang.org/u/vitalyd)
 - [Sam](https://morph.is/v0.8/)
+- [amosonn](https://github.com/amosonn)
 - BronzeAge
 - DreadLord
 
