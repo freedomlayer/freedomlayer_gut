@@ -1,27 +1,29 @@
 +++
-title = "Announcing Offst 0.1.0"
+title = "Announcing Offst 0.1.0 🎉🎉🎉"
 description = "Announcing Offst 0.1.0"
 date = 2019-04-24
 +++
 
-We are glad to announce the first preview [release of Offst](https://github.com/freedomlayer/offst/releases)!
-
+We are glad to announce the first public release of Offst!  
 Offst is a decentralized payment system, allowing to pay and process payments
-efficiently and safely.
+efficiently and safely. Offst is an open source project, written in Rust, licensed under
+[AGPL3](https://opensource.org/licenses/AGPL-3.0).
 
-You don't need a bank account, credit card or even an email address to use
-Offst. On the other hand, Offst currently doesn't have an interface to the
-traditional banking system, and therefore you can not use it yet to buy food at
-the grocery store.
+You don't need a bank account, credit card, phone number or even an email
+address to use Offst. On the other hand, Offst currently doesn't have an
+interface to the traditional banking system, and therefore you can not use it
+yet to buy food at the grocery store.
 
-Offst is an open source project, written in Rust, licensed under
-[AGPL3](https://opensource.org/licenses/AGPL-3.0), contribution is always
-welcome!  Visit the [Offst repository](https://github.com/freedomlayer/offst)
-for more info.
 
-**Warning!** This release of Offst is very initial and not ready to use in
-production.
+**!Warning!** This release of Offst is very initial and not ready to use in
+production. **!Warning!**
 
+## Quick links
+
+- [Releases page](https://github.com/freedomlayer/offst/releases)
+- [Repository](https://github.com/freedomlayer/offst)
+- [Documentation](https://offst.readthedocs.io/en/latest/?badge=latest)
+- [Quick Offst tutorial](https://offst.readthedocs.io/en/latest/tutorial/)
 
 ## The core idea
 
@@ -335,11 +337,41 @@ message](./about/_index.md).
 
 ## Future work
 
-TODO
+Offst is far from done. The following is a very general outline of what we plan
+to do next:
+
+- Gathering feedback from preview release
+
+- Offst core (stnode, stindex, strelay):
+    - Refactoring codebase
+    - Documentation
+    - Stabilizing Offst protocol and interfaces
+    - Migrating to use an sqlite3 database for node
+    - Adding tests
+    - Security review
+
+- Offst Applications:
+    - Creating a GUI desktop application. (Possibly a browser addon?)
+
+- A mobile GUI application for Offst.
+
 
 ## Contributors
 
-TODO
+This is a good time to thank people who helped making Offst possible:
+
+- [Kamyuen Tse](https://github.com/kamyuentse)
+- [A4Vision](https://github.com/A4Vision)
+- [juchiast](https://github.com/juchiast)
+- [pzmarzly](https://github.com/pzmarzly)
+- [Cy6erlion](https://github.com/Cy6erlion)
+- [Nemo157](https://github.com/Nemo157)
+- [vitalyd](https://users.rust-lang.org/u/vitalyd)
+- [Sam](https://morph.is/v0.8/)
+- BronzeAge
+- DreadLord
+
+We welcome contributions from anyone. Don't hesitate to reach out!
 
 
 
