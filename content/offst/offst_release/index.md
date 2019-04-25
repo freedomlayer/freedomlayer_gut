@@ -14,9 +14,12 @@ address to use Offst. On the other hand, Offst currently doesn't have an
 interface to the traditional banking system, and therefore you can not use it
 yet to buy food at the grocery store.
 
+## Warning
 
-**!Warning!** This release of Offst is very initial and not ready to use in
-production. **!Warning!**
+**This release of Offst is very initial and not ready to use in
+production!**. There are most certainly bugs in this release, and the interface and protocols
+will almost surely break in the next releases, so please don't move all your
+savings into Offst yet.
 
 ## Quick links
 
@@ -24,6 +27,37 @@ production. **!Warning!**
 - [Repository](https://github.com/freedomlayer/offst)
 - [Documentation](https://offst.readthedocs.io/en/latest/?badge=latest)
 - [Quick Offst tutorial](https://offst.readthedocs.io/en/latest/tutorial/)
+
+
+## Main features
+
+- Efficient and quick payments. Offst does not rely on a [blockchain](https://en.wikipedia.org/wiki/Blockchain) or any kind
+    of [proof of work](https://en.wikipedia.org/wiki/Proof-of-work_system).
+    Every transaction affects only a few computers in the network. Payments
+    usually take less than a second.
+
+- Low flat payment fees. Payment fees are determined by the length of the route
+    on which the payment is sent. Each participant along the route gets exactly
+    one credit.
+
+- Fair distribution of assets: The total amount of credits in the Offst system
+    is **0**, and it is initially distributed evenly between all the
+    participants (Read more to learn how it works)
+
+- If you lost your key, you can talk to some friends and restore your
+    account.
+
+- Censorship resistent. Buy whatever you want, sell whatever you want. Offst is
+    decentralized, and therefore no entity can block or censor payments.
+
+- Full raw control: Offst is fully programmable and has open interface for
+    writing applications.
+
+
+## Command line Video tutorial
+
+<script id="asciicast-242796" src="https://asciinema.org/a/242796.js" async></script>
+
 
 ## The core idea
 
@@ -240,7 +274,7 @@ the full state of the Offst network. Therefore Index server owners should
 configure their index servers to talk to each other.
 
 
-## Offst applications
+## Offst apps
 
 The way to communicate with Offst node is through Offst apps.
 Offst comes with a simple command line app called stctrl. Apps can be
@@ -275,12 +309,6 @@ credits, and the remote max debt (credit limit imposed by the local node) is
 200 credits.
 
 
-## Quick tutorial
-
-How to set up your own node? Check out the
-[quick tutorial](https://offst.readthedocs.io/en/latest/tutorial/).
-
-
 ## Public relays and index servers
 
 We set up a pair of relay servers and a pair of index servers to get you
@@ -298,6 +326,15 @@ started. We include here their tickets:
 
 It doesn't matter which ones you pick. Learn how to configure your offst node
 [here](https://offst.readthedocs.io/en/latest/tutorial/).
+
+
+## Add me
+
+Let's start experimenting with Offst. I opened a node.
+
+If you want to add my node as a friend, this is my friend file: [real_node.friend](real_node.friend).
+Remember that I have to add you as a friend too, so email me your friend file.
+You can find my email at the [about page](./about/_index.md).
 
 
 ## Cryptography
