@@ -412,19 +412,16 @@ This is a good time to thank people who helped making Offst possible:
 
 We welcome contributions from anyone. Don't hesitate to reach out!
 
+<hr/>
 
-
-[^1]: 
-If we believe the idea of [Six degrees of
+[^1]: If we believe the idea of [Six degrees of
 separation](https://en.wikipedia.org/wiki/Six_degrees_of_separation), then the
 average transaction might require a fee of 6 credits.  
 
-[^2]: 
-Instead, only a weak form of consensus is obtained along the route where the
+[^2]:Instead, only a weak form of consensus is obtained along the route where the
 funds are pushed.
 
-[^3]:
-In the future we can implement smarter logic that attempts to form a real
+[^3]: In the future we can implement smarter logic that attempts to form a real
 p2p connection between nodes. At this point we chose the trivial and simple
 solution to develop.
 
