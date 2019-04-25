@@ -1,0 +1,5 @@
+public_key = "2R6Or9CGLQ2nhdgs1MUSZuRDTMNxhggG1AY1_SdoE7A"
+
+[[relays]]
+public_key = "Gd_LOrL5YlBwCO7aY0CikmXa7gKFHeKq2wur7KdobbA"
+address = "relay0.offst.org:8080"
