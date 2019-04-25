@@ -47,7 +47,7 @@ savings into Offst yet.
 - If you lost your key, you can talk to some friends and restore your
     account.
 
-- Censorship resistent. Buy whatever you want, sell whatever you want. Offst is
+- Censorship resistant. Buy whatever you want, sell whatever you want. Offst is
     decentralized, and therefore no entity can block or censor payments.
 
 - Full raw control: Offst is fully programmable and has open interface for
@@ -150,7 +150,7 @@ maximum amount of credits it can own.
 In other words: In the closed system of Alice and Bob, The richest Alice can be
 is 100 credits. The richest Bob can be is 80 credits. 
 
-As a corollay, the amount of trust (credit limit) a participant puts on other
+As a corollary, the amount of trust (credit limit) a participant puts on other
 participants limits the amount of maximum credits the participant can own. This
 amount is also the maximum amount of credits a participant can lose by trusting
 other participants.
