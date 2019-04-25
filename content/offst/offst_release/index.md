@@ -1,7 +1,7 @@
 +++
 title = "Announcing Offst 0.1.0 🎉🎉🎉"
 description = "Announcing Offst 0.1.0"
-date = 2019-04-24
+date = 2019-04-25
 +++
 
 We are glad to announce the first public release of Offst!  
