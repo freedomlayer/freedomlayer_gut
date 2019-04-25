@@ -328,15 +328,6 @@ It doesn't matter which ones you pick. Learn how to configure your offst node
 [here](https://offst.readthedocs.io/en/latest/tutorial/).
 
 
-## Add me
-
-Let's start experimenting with Offst. I opened a node.
-
-If you want to add my node as a friend, this is my friend file: [real_node.friend](real_node.friend).
-Remember that I have to add you as a friend too, so email me your friend file.
-You can find my email at the [about page](./about/_index.md).
-
-
 ## Cryptography
 
 Offst depends on [ring](https://github.com/briansmith/ring) for its cryptographic code.
@@ -391,6 +382,16 @@ to do next:
     - Creating a GUI desktop application. (Possibly a browser addon?)
 
 - A mobile GUI application for Offst.
+
+## Add me
+
+Let's start experimenting with Offst. I opened a node.
+
+If you want to add my node as a friend, this is my friend file: [real_node.friend](real_node.friend).
+Remember that I have to add you as a friend too, so email me your friend file.
+You can find my email at the [about page](./about/_index.md).
+
+
 
 
 ## Contributors
