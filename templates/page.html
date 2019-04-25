@@ -3,6 +3,7 @@
 
 {% block custom_content %}
 <article itemscope itemtype="http://schema.org/BlogPosting">
+    Subscribe to get updates: {{ post_macros::mailchimp() }}
     <header>
         <h1 itemprop="headline">{{ page.title }}</h1>
         <span>{{ post_macros::meta(page=page) }}</span>
@@ -13,6 +14,7 @@
     </div>
 
     {% block page_footer %}
+    <br/>
         <footer>
             <p>
                 {% if config.extra.author %}
