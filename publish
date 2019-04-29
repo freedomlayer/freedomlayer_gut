@@ -13,7 +13,7 @@ OUTPUTDIR=${CURDIR}/public
 
 # Create a release version of the website.
 # Note: If uploaded with the output files of gutenberg publish, the website will not work properly.
-gutenberg build
+zola build
 
 # Sync using s3cmd:
 s3cmd sync ${OUTPUTDIR}/ s3://${S3_BUCKET} --acl-public --delete-removed \
