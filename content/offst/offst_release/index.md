@@ -128,8 +128,10 @@ For example:
 - Alice configures a credit limit for Bob: 100 credits.
 - Bob configures a credit limit for Alice: 80 credits.
 
-This means Bob can never owe Alice more than 80 credits, and Alice can never
-owe Bob more than 100 credits.
+This means Bob can never owe Alice more than 100 credits, and Alice can never
+owe Bob more than 80 credits. (EDIT: Fixed thanks to
+[nirizr](https://github.com/nirizr/))
+
 
 From the point of view of Alice:
 
