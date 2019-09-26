@@ -38,8 +38,8 @@ the network.
 
 We have seen so far a few ways of routing messages in a mesh network: Flooding
 (See [The mesh
-question](research/mesh_question) and
-[sqrt(n) routing](research/sqrt_n_routing).
+question](@/research/mesh_question/index.md) and
+[sqrt(n) routing](@/research/sqrt_n_routing/index.md).
 
 Flooding was pretty inefficient (However pretty robust and secure). The idea of
 $\sqrt{n}$-routing was a bit more efficient, though it required that every

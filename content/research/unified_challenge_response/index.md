@@ -115,7 +115,7 @@ make sure that $x$ sends to $y$ a different challenge every time.
 Assume that some node $t$ is a pretty important node in the network. It's so
 important that every node $x$ in the network keeps a path to $t$. (An
 example to this case could be found in [Landmarks Navigation by Random
-Walking](./research/landmarks_navigation_rw/index.md),
+Walking](@/research/landmarks_navigation_rw/index.md),
 where $t$ might be one of the landmarks).
 
 Note that this case is a bit different from the one described above. It

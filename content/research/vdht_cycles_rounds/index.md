@@ -40,7 +40,7 @@ because the graph is connected, and those paths exist.
 Given that every node of number $x$ knows paths to nodes of numbers $x-2^i,
 x+2^i$, every node $y$ should be able to send a message to any other node $z$ in
 the network using the [greedy routing algorithm of the Chord
-DHT](./research/dht_intro/index.md): In every
+DHT](@/research/dht_intro/index.md): In every
 iteration send the message to the closest known node to the destination.
 
 
@@ -326,7 +326,7 @@ a cycles that have only one round.
 On the quest of finding a strong enough setting to eliminate cycles with
 multiple rounds, we add more fingers. A nice bet would be to add all the fingers
 of sizes which are powers of $2$, just like in the original
-[Chord DHT structure](./research/dht_intro/index.md).
+[Chord DHT structure](@/research/dht_intro/index.md).
 
 To be more specific: We say that a node $x$ maintains a finger $k$ if $x$
 remembers a path to: 

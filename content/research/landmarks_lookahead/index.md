@@ -81,7 +81,7 @@ of proving this.
 
 The following experiment is used to check the performance of landmarks routing
 with lookahead, and compare its performance with chord [Virtual DHT
-routing](./research/exp_virtual_dht_routing/index.md).
+routing](@/research/exp_virtual_dht_routing/index.md).
 Also see [A globally connected overlay for Virtual Ring Routing [pdf]](/articles/chord_connected_routing.pdf).
 
 How to read this table? 

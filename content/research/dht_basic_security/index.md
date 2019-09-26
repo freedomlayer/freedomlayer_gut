@@ -178,7 +178,7 @@ to perform.
 
 In the following sections we will try to deal with various security issues that
 might arise in a DHT. We have met the [Chord
-DHT](./research/dht_intro/index.md) but this might
+DHT](@/research/dht_intro/index.md) but this might
 apply to a wider range of DHT structures.
 
 Regarding the Adversarial model: We are going to assume a Node Bounded Slow
