@@ -7,8 +7,13 @@ date = 2019-09-24
 Offst is a digital credit card, allowing secure and free payments.
 
 We have just released version 0.1.1 of Offst. This is a short update about changes
-from the last version (v0.1.0), and also about some future plans. You can check
-the new release at the [releases page](https://github.com/freedomlayer/offst/releases).
+from the last version (v0.1.0), and also about some future plans. 
+
+Quick links:
+
+- [Releases page](https://github.com/freedomlayer/offst/releases)
+- [Repository](https://github.com/freedomlayer/offst)
+- [First version announcement](@/offst/offst_release/index.md)
 
 
 ## Main changes
