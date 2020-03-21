@@ -1,10 +1,10 @@
 +++
-title = "Relaying TCP connections in Offst"
-description = "Relaying TCP connections in Offst"
+title = "Relaying TCP connections in Offset"
+description = "Relaying TCP connections in Offset"
 date = 2018-12-08
 +++
 
-[Offst](https://github.com/freedomlayer/offst) is designed to be a peer to peer
+[Offset](https://github.com/freedomlayer/offset) is designed to be a peer to peer
 payment system. However, many users do not have direct access to the Internet
 because they are behind a NAT or other restrictive boxes.  This means that peer
 to peer connections are sometimes [very difficult to
@@ -14,9 +14,9 @@ As a workaround we had to come up with a relay mechanism, allowing servers to
 relay communication between any two clients. Relays federate, and anyone can
 open a communication relay. 
 
-The Relays are oblivious to the underlying payment protocols employed by Offst.
+The Relays are oblivious to the underlying payment protocols employed by Offset.
 The underlying communication is encrypted end to end. The Relay job is only to
-transfer this communication. In other words: Payments in Offst are done in a
+transfer this communication. In other words: Payments in Offset are done in a
 peer to peer fashion, but the communication is relayed through federated
 servers.
 
@@ -27,7 +27,7 @@ Relay. A Relay allows two clients to talk to each other:
 Client --[TCP]-- Relay --[TCP]-- Client
 ```
 
-Let's begin with the schema of the Relay mechanism of [offst](https://github.com/freedomlayer/offst) :
+Let's begin with the schema of the Relay mechanism of [offset](https://github.com/freedomlayer/offset) :
 
 ```
 # First message sent after a connection was encrypted.
@@ -59,7 +59,7 @@ struct IncomingConnection {
 
 The schema above represents [cap'n proto](https://capnproto.org/) serialization
 structures. The full schema code can be found 
-[here](https://github.com/freedomlayer/offst/blob/24f40e516e78737946d7a27b66d18ee88c5b58e2/components/proto/src/schema/relay.capnp).
+[here](https://github.com/freedomlayer/offset/blob/24f40e516e78737946d7a27b66d18ee88c5b58e2/components/proto/src/schema/relay.capnp).
 Don't worry if you have never read cap'n proto before, I will soon explain what
 each structure is supposed to do.
 

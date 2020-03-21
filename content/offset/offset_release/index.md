@@ -1,37 +1,37 @@
 +++
-title = "Announcing Offst 0.1.0 🎉🎉🎉"
-description = "Announcing Offst 0.1.0"
+title = "Announcing Offset 0.1.0 🎉🎉🎉"
+description = "Announcing Offset 0.1.0"
 date = 2019-04-25
 +++
 
-We are glad to announce the first public release of Offst!  
-Offst is a decentralized payment system, allowing to pay and process payments
-efficiently and safely. Offst is an open source project, written in Rust, licensed under
+We are glad to announce the first public release of Offset!  
+Offset is a decentralized payment system, allowing to pay and process payments
+efficiently and safely. Offset is an open source project, written in Rust, licensed under
 [AGPL3](https://opensource.org/licenses/AGPL-3.0).
 
 You don't need a bank account, credit card, phone number or even an email
-address to use Offst. On the other hand, Offst currently doesn't have an
+address to use Offset. On the other hand, Offset currently doesn't have an
 interface to the traditional banking system, and therefore you can not use it
 yet to buy food at the grocery store.
 
 ## Warning
 
-**This release of Offst is very initial and not ready to use in
+**This release of Offset is very initial and not ready to use in
 production!**. There are most certainly bugs in this release, and the interface and protocols
 will almost surely break in the next releases, so please don't move all your
-savings into Offst yet.
+savings into Offset yet.
 
 ## Quick links
 
-- [Releases page](https://github.com/freedomlayer/offst/releases)
-- [Repository](https://github.com/freedomlayer/offst)
-- [Documentation](https://offst.readthedocs.io/en/latest/?badge=latest)
-- [Quick Offst tutorial](https://offst.readthedocs.io/en/latest/tutorial/)
+- [Releases page](https://github.com/freedomlayer/offset/releases)
+- [Repository](https://github.com/freedomlayer/offset)
+- [Documentation](https://offset.readthedocs.io/en/latest/?badge=latest)
+- [Quick Offset tutorial](https://offset.readthedocs.io/en/latest/tutorial/)
 
 
 ## Main features
 
-- Efficient and quick payments. Offst does not rely on a [blockchain](https://en.wikipedia.org/wiki/Blockchain) or any kind
+- Efficient and quick payments. Offset does not rely on a [blockchain](https://en.wikipedia.org/wiki/Blockchain) or any kind
     of [proof of work](https://en.wikipedia.org/wiki/Proof-of-work_system).
     Every transaction affects only a few computers in the network. Payments
     usually take less than a second.
@@ -40,17 +40,17 @@ savings into Offst yet.
     on which the payment is sent. Each participant along the route gets exactly
     one credit.
 
-- Fair distribution of assets: The total amount of credits in the Offst system
+- Fair distribution of assets: The total amount of credits in the Offset system
     is **0**, and it is initially distributed evenly between all the
     participants (Read more to learn how it works)
 
 - If you lost your key, you can talk to some friends and restore your
     account.
 
-- Censorship resistant. Buy whatever you want, sell whatever you want. Offst is
+- Censorship resistant. Buy whatever you want, sell whatever you want. Offset is
     decentralized, and therefore no entity can block or censor payments.
 
-- Full raw control: Offst is fully programmable and has open interface for
+- Full raw control: Offset is fully programmable and has open interface for
     writing applications.
 
 
@@ -61,15 +61,15 @@ savings into Offst yet.
 
 ## The core idea
 
-Offst is a digital payment system based on [mutual credit](https://en.wikipedia.org/wiki/Mutual_credit).
+Offset is a digital payment system based on [mutual credit](https://en.wikipedia.org/wiki/Mutual_credit).
 
 The common method of running an economy is to divide some amount of money bills
 between people and let them play. Usually there are some people in charge of
 printing more money bills or destroying money bills to keep the economy going.
 
-Offst works in a different way. 
+Offset works in a different way. 
 
-Quoting From the [documentation](https://offst.readthedocs.io/en/latest/?badge=latest):
+Quoting From the [documentation](https://offset.readthedocs.io/en/latest/?badge=latest):
 
 Consider Alice, who has two friends, Bob and [Charli](https://en.wikipedia.org/wiki/Charli_XCX).
 Suppose that at the same time:
@@ -101,12 +101,12 @@ If Bob and Charli perform these kinds of transactions very often, it is
 reasonable for Alice to charge for forwarding the transactions. For example,
 Alice could charge 1 dollar for every transaction she forwards.
 
-Offst is a system that works this way. People or organizations can set up
+Offset is a system that works this way. People or organizations can set up
 mutual credit with each other, and leverage those mutual credits to send
 payments to anyone in the network. A participant that mediates a transaction
 earns 1 credit.
 
-In Offst we call two entities that have set up together mutual credit account
+In Offset we call two entities that have set up together mutual credit account
 **friends**.
 
 ## Setting credit limit
@@ -120,7 +120,7 @@ Why not? Alice is afraid that Bob will default on this debt one
 day. Maybe Alice can trust Bob with certain amount of debt, but not with too
 much debt. 
 
-The solution Offst offers to this trust problem is that both sides configure
+The solution Offset offers to this trust problem is that both sides configure
 credit limits.
 
 For example:
@@ -160,7 +160,7 @@ other participants.
 
 ## The value of one credit
 
-The basic amount of value in Offst is **one credit**. One credit is exactly the
+The basic amount of value in Offset is **one credit**. One credit is exactly the
 amount of value you earn when you help mediate a transaction. 
 
 What is the value of one credit with respect to known currencies? We are not sure
@@ -173,7 +173,7 @@ use a payment system where the fees are too high.
 
 On the other hand, if the value of 1 credit is too small, there is no real
 incentive for people to run nodes. From this side, we might conjecture that the
-amount of transactions mediated by one Offst node for a day should be able to
+amount of transactions mediated by one Offset node for a day should be able to
 cover the costs of running that node.
 
 
@@ -185,28 +185,28 @@ The reason for this is that every excess in credits in one participant is the
 dual of lack of credits in another participant.
 
 
-## How Offst works?
+## How Offset works?
 
-The core of Offst is the credit pushing mechanism. It allows to send credits
+The core of Offset is the credit pushing mechanism. It allows to send credits
 along a route of mutual credit edges in a secure way. You can read more about it
-in the [project documentation](https://offst.readthedocs.io/en/latest/theory).
+in the [project documentation](https://offset.readthedocs.io/en/latest/theory).
 
-Offst does not use a [blockchain](https://en.wikipedia.org/wiki/Blockchain) and
-does not contain any form of proof of work. In addition, Offst does not attempt
-to achieve a global consensus [^2]. Offst is very efficient. Every transaction
-sent using Offst only affects a few other computers in the network (according to the
+Offset does not use a [blockchain](https://en.wikipedia.org/wiki/Blockchain) and
+does not contain any form of proof of work. In addition, Offset does not attempt
+to achieve a global consensus [^2]. Offset is very efficient. Every transaction
+sent using Offset only affects a few other computers in the network (according to the
 length of the route).
 
 
 ## Network topology
 
-Offst is made of a few main services:
+Offset is made of a few main services:
 
-- Offst node (stnode)
-- Offst relay (strelay)
-- Offst index (stindex)
+- Offset node (stnode)
+- Offset relay (strelay)
+- Offset index (stindex)
 
-Example for part of the Offst network topology:
+Example for part of the Offset network topology:
 
 ```text
                   +-------+
@@ -243,11 +243,11 @@ In the figure above: Two nodes can communicate using relays and find routes
 using index servers. Some applications are connected to the nodes.
  
 
-**stnode** is the binary that runs the Offst node service. It is the core part of
-Offst that executes the credit pushing mechanism. This binary is what most
+**stnode** is the binary that runs the Offset node service. It is the core part of
+Offset that executes the credit pushing mechanism. This binary is what most
 users will run on their end device.
 
-**strelay** is a binary that runs the Offst relay service. It is used to relay
+**strelay** is a binary that runs the Offset relay service. It is used to relay
 communication between nodes. The communication between nodes is end-to-end
 encrypted, and therefore strelay can not read the communication. Anyone can run
 a relay. We use relays because most users are behind one or more
@@ -258,7 +258,7 @@ Relay servers are a form of a network meeting point between nodes. It allows
 nodes to communicate. Every node must configure at least one relay server to
 be able to communicate with other nodes.
 
-**stindex** is a binary that runs the Offst index service. It is used to index
+**stindex** is a binary that runs the Offset index service. It is used to index
 the relationships between nodes and supply routes that can be used to send
 funds. 
 
@@ -266,21 +266,21 @@ Every node sends periodic information to a (preconfigured) index server about
 his relationship with his friend nodes. The index servers share this
 information with each other and use it to index the whole network.
 
-Whenever a node wants to send funds to another node, it first queries an Offst
+Whenever a node wants to send funds to another node, it first queries an Offset
 index for a route. Then the node uses the provided route to send the funds to
 the remote node.
 
 Anyone can run an index, but an index is not useful if it is not part of the
 index servers federation, because it will not be able to get information about
-the full state of the Offst network. Therefore Index server owners should
+the full state of the Offset network. Therefore Index server owners should
 configure their index servers to talk to each other.
 
 
-## Offst apps
+## Offset apps
 
-The way to communicate with Offst node is through Offst apps.
-Offst comes with a simple command line app called stctrl. Apps can be
-configured to have certain permissions. Offst Apps communicate with the Offst
+The way to communicate with Offset node is through Offset apps.
+Offset comes with a simple command line app called stctrl. Apps can be
+configured to have certain permissions. Offset Apps communicate with the Offset
 node using TCP communication (Capnp serialized), therefore apps can be written
 in any language by anyone.
 
@@ -326,14 +326,14 @@ started. We include here their tickets:
 - relay1: [ticket](relay1.ticket)
 
 
-It doesn't matter which ones you pick. Learn how to configure your offst node
-[here](https://offst.readthedocs.io/en/latest/tutorial/).
+It doesn't matter which ones you pick. Learn how to configure your offset node
+[here](https://offset.readthedocs.io/en/latest/tutorial/).
 
 
 ## Cryptography
 
-Offst depends on [ring](https://github.com/briansmith/ring) for its cryptographic code.
-Offst relies on the following cryptographic primitives:
+Offset depends on [ring](https://github.com/briansmith/ring) for its cryptographic code.
+Offset relies on the following cryptographic primitives:
 
 - Diffie Hellman
 - Symmetric encryption
@@ -347,17 +347,17 @@ hierarchy](https://en.wikipedia.org/wiki/Certificate_authority) because:
 
 - It forces users to buy domain names.
 - Using it could give power to a small
-    amount of organizations to shut down Offst services.
+    amount of organizations to shut down Offset services.
 
 
 ## License
 
-The Offst project is licensed under the GNU Affero General Public License
-version 3 (AGPL3), but Offst applications can be written under any license and
+The Offset project is licensed under the GNU Affero General Public License
+version 3 (AGPL3), but Offset applications can be written under any license and
 can also be written for commercial usage.
 
 We plan to convert all the interface related crates to the
-MIT license, to allow Rust developers to reuse Offst interface to write Rust applications.
+MIT license, to allow Rust developers to reuse Offset interface to write Rust applications.
 
 Why AGPL3? Because we believe payment related code should always be open
 source. This is important both from security and transparency perspectives. If
@@ -367,27 +367,27 @@ message](./about/_index.md).
 
 ## Future work
 
-Offst is far from done. The following is a very general outline of what we plan
+Offset is far from done. The following is a very general outline of what we plan
 to do next:
 
 - Gathering feedback from preview release
 
-- Offst core (stnode, stindex, strelay):
+- Offset core (stnode, stindex, strelay):
     - Refactoring codebase
     - Documentation
-    - Stabilizing Offst protocol and interfaces
+    - Stabilizing Offset protocol and interfaces
     - Migrating to use an sqlite3 database for node
     - Adding tests
     - Security review
 
-- Offst Applications:
+- Offset Applications:
     - Creating a GUI desktop application. (Possibly a browser addon?)
 
-- A mobile GUI application for Offst.
+- A mobile GUI application for Offset.
 
 ## Add me
 
-Let's start experimenting with Offst. I opened a node.
+Let's start experimenting with Offset. I opened a node.
 
 If you want to add my node as a friend, this is my friend file: [real_node.friend](real_node.friend).
 Remember that I have to add you as a friend too, so email me your friend file.
@@ -398,7 +398,7 @@ You can find my email at the [about page](./about/_index.md).
 
 ## Contributors
 
-This is a good time to thank people who helped making Offst possible:
+This is a good time to thank people who helped making Offset possible:
 
 - [Kamyuen Tse](https://github.com/kamyuentse)
 - [A4Vision](https://github.com/A4Vision)

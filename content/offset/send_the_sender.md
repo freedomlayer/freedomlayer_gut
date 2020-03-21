@@ -46,9 +46,9 @@ service. Instead of having to remember which request matches which response
 3. Wait on the oneshot receiver until we get a response.
 
 
-I used this trick many times in the code of [Offst](about_offst.md). A
+I used this trick many times in the code of [Offset](about_offset.md). A
 simple example is the Timer component. Check out [the code on
-github](https://github.com/Freedomlayr/offst) if you want to learn more.
+github](https://github.com/freedomlayer/offset) if you want to learn more.
 
 
 ## Example Adder service

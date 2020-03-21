@@ -5,7 +5,7 @@ date = 2018-12-15
 +++
 
 I am working these days on the development of
-[offst](https://github.com/freedomlayer/offst)'s Index server. I needed to
+[offset](https://github.com/freedomlayer/offset)'s Index server. I needed to
 implement a basic directed graph structure, allowing to run the [BFS
 algorithm](https://en.wikipedia.org/wiki/Breadth-first_search) to find routes
 with a certain amount of capacity. 
@@ -319,10 +319,10 @@ fn neighbors_with_send_capacity(&self, a: N, capacity: u128) -> OptionIterator<i
 
 Zero cost abstractions, as promised (:
 
-This is the actual implementation currently chosen for the code in offst. If
+This is the actual implementation currently chosen for the code in offset. If
 you are interested, you can view the full code of `SimpleCapacityGraph`
 implementation [on
-github](https://github.com/freedomlayer/offst/blob/6f91692cc751c3c47e2ad54ce285306c07cde4a3/components/index_server/src/graph/simple_capacity_graph.rs).
+github](https://github.com/freedomlayer/offset/blob/6f91692cc751c3c47e2ad54ce285306c07cde4a3/components/index_server/src/graph/simple_capacity_graph.rs).
 
 
 ## Further reading

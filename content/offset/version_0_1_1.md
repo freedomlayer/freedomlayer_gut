@@ -4,25 +4,25 @@ description = "v0.1.1 Changes and future plans"
 date = 2019-09-24
 +++
 
-Offst is a digital credit card, allowing secure and free payments.
+Offset is a digital credit card, allowing secure and free payments.
 
-We have just released version 0.1.1 of Offst. This is a short update about changes
+We have just released version 0.1.1 of Offset. This is a short update about changes
 from the last version (v0.1.0), and also about some future plans. 
 
 Quick links:
 
-- [Releases page](https://github.com/freedomlayer/offst/releases)
-- [Repository](https://github.com/freedomlayer/offst)
-- [First version announcement](@/offst/offst_release/index.md)
+- [Releases page](https://github.com/freedomlayer/offset/releases)
+- [Repository](https://github.com/freedomlayer/offset)
+- [First version announcement](@/offset/offset_release/index.md)
 
 
 ## Main changes
 
 ### Atomic payments
 
-Proposal can be found [here](https://github.com/freedomlayer/offst/blob/c8bc6aa9c14acd76156752fb75d1ced50a6515cb/doc/docs/atomic_proposal.md).
+Proposal can be found [here](https://github.com/freedomlayer/offset/blob/c8bc6aa9c14acd76156752fb75d1ced50a6515cb/doc/docs/atomic_proposal.md).
 
-In the previous version of Offst, a payment could take indefinite amount of
+In the previous version of Offset, a payment could take indefinite amount of
 time. From the point of view of the buyer, sending funds is a risky operation
 because funds might take indefinite amount of time to arrive, and there is no
 way to stop the operation.
@@ -72,7 +72,7 @@ solution.
 
 ### Added capnp ergonomics
 
-Serialization and deserialization in Offst is done using Capnp, relying on the
+Serialization and deserialization in Offset is done using Capnp, relying on the
 [capnp-rust](https://github.com/capnproto/capnproto-rust) crate.
 
 Using `capnp-rust` in its current form requires to write very similar code
@@ -98,7 +98,7 @@ pub struct FriendsRoute {
 }
 ```
 
-3. Middle layer code, converting between capnp Rust structs and Offst's Rust's
+3. Middle layer code, converting between capnp Rust structs and Offset's Rust's
    structs:
 
 ```rust
@@ -135,7 +135,7 @@ layer code. Verification of matching of field names between the Rust code and
 Capnp schemas is done during compile time.
 
 This code for capnp-conv can be found
-[here](https://github.com/freedomlayer/offst/tree/c8bc6aa9c14acd76156752fb75d1ced50a6515cb/components/capnp_conv).
+[here](https://github.com/freedomlayer/offset/tree/c8bc6aa9c14acd76156752fb75d1ced50a6515cb/components/capnp_conv).
 When it gets stabilized we hope to release it as a separate crate, or possibly
 as part of the `capnp-rust` crate.
 
@@ -147,7 +147,7 @@ confident, and with style.
 
 ### Upgrading "Futures"
 
-Offst was recently updated to run on the `nightly-2019-09-13` toolchain.
+Offset was recently updated to run on the `nightly-2019-09-13` toolchain.
 
 The first change that required fixing was the new [await
 postfix](https://boats.gitlab.io/blog/post/await-decision/).  We had to change
@@ -203,9 +203,9 @@ let (mut sender, _receiver) = mpsc::channel::<u32>(9);
 ```
 
 This code is taken from the tests of `TestExecutor`, which can be found
-[here](https://github.com/freedomlayer/offst/blob/c8bc6aa9c14acd76156752fb75d1ced50a6515cb/components/common/src/test_executor.rs)
+[here](https://github.com/freedomlayer/offset/blob/c8bc6aa9c14acd76156752fb75d1ced50a6515cb/components/common/src/test_executor.rs)
 This is a Futures Executor we wrote for the purpose of writing deterministic
-futures tests in Offst. It also helps with time travelling and discovering
+futures tests in Offset. It also helps with time travelling and discovering
 deadlocks. I hope to be able to explain more about it in a different post.
 
 
@@ -213,36 +213,36 @@ deadlocks. I hope to be able to explain more about it in a different post.
 
 ### Multiple currencies
 
-A [question by bltavares](https://github.com/freedomlayer/offst/issues/228) led
-to a long discussion about using Offst with different currencies.
+A [question by bltavares](https://github.com/freedomlayer/offset/issues/228) led
+to a long discussion about using Offset with different currencies.
 
-Offst currently allows to manage mutual credit between pairs of entities using
-a single currency. What `bltavares` actually asked is why can't we use Offst to
+Offset currently allows to manage mutual credit between pairs of entities using
+a single currency. What `bltavares` actually asked is why can't we use Offset to
 manage mutual credit in other currencies.
 
-The current version of Offst should allow trading multiple currencies, but not
+The current version of Offset should allow trading multiple currencies, but not
 in a very convenient way. If a user want to use multiple currencies, he has to
 open multiple wallets, each one containing a different currency. In addition, a
 user using currenty of type B will have to be extra careful to not accidentally
-join an Offst network using currency of type C, as this could result in loss of
+join an Offset network using currency of type C, as this could result in loss of
 money.
 
 This state is not acceptable from safety point of view, and therefore if we
-ever want to allow using multiple currencies with Offst we will have to change
+ever want to allow using multiple currencies with Offset we will have to change
 something in the way it works.
 
 The two ideas I had for this are:
 
 1. Adding the name of the currency for the protocol messages. This will make
-    sure that a user of currency B can never accidentally join an Offst network
+    sure that a user of currency B can never accidentally join an Offset network
     that trades with currency C. 
 
-2. Implementing support for multi currencies inside the Offst protocol,
+2. Implementing support for multi currencies inside the Offset protocol,
    allowing to keep multiple balances (in different currencies) between every two nodes.
 
 
 Option (1) is simpler to implement. Option (2) requires a large modification to
-the Offst codebase.
+the Offset codebase.
 
 A diagram of solution (1):
 
@@ -268,7 +268,7 @@ bit more complex protocol (which can maintain multiple balances).
 
 ### Replace cryptographic library
 
-Offst currently relies on the `ring` crate to perform cryptographic operations:
+Offset currently relies on the `ring` crate to perform cryptographic operations:
 
 - Hash functions (Sha512)
 - Symmetric encryption (Chacha20 + Poly1305)
@@ -293,14 +293,14 @@ deal with at some point. The way I see it, our options would be:
 
 - Convince the maintainers of the `ring` crate to add a mechanism for mocking a
     random generator.
-- Replace the cryptographic library Offst depends on.
+- Replace the cryptographic library Offset depends on.
 - Use a spectacular mocking hack for testing, like conditional compilation or
     deep usage of traits.
 
 
 ### Graphical user interface
 
-We consider creating a graphical user interface for using Offst, possibly as:
+We consider creating a graphical user interface for using Offset, possibly as:
 
 - Browser extension
 - Mobile application

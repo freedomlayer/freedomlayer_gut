@@ -1,6 +1,6 @@
 +++
-title = "About the Offst project"
-description = "Introducing the Offst project"
+title = "About the Offset project"
+description = "Introducing the Offset project"
 date = 2018-10-25
 +++
 
@@ -11,7 +11,7 @@ yet to play with), but I figured out that by now the idea is worth sharing,
 both for the purpose of clearing my thoughts about it, and also to hopefully
 get some feedback.
 
-You can find the project on github. It is called [Offst](https://www.github.com/Freedomlayer/offst),
+You can find the project on github. It is called [Offset](https://www.github.com/Freedomlayer/offset),
 released under the GNUv3 license, written in Rust.
 
 If you have been reading the news lately, you probably heard about the idea of
@@ -224,11 +224,11 @@ I hope to talk about in the near future:
 - Networking: How friends in the network communicate? How to do this in a
     decentralized and secure way?
 
-- Implementation details: about implementing Offst with Rust and the Futures
+- Implementation details: about implementing Offset with Rust and the Futures
     asynchronous primitives.
 
 
-## Current plan for the Offst
+## Current plan for the Offset
 
 I believe that much of the core functionality has already been written. This
 includes:

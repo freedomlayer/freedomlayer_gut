@@ -5,10 +5,10 @@ date = 2018-11-07
 +++
 
 Backwards credit payment is the core of the payments mechanism used in
-[Offst](https://www.offst.org). It allows to send credits securely through a
+[Offset](https://www.offsetcredit.org). It allows to send credits securely through a
 chain of mutually trusting friends.
 
-Recall that in the [previous post](./offst/about_offst.md) we showed that
+Recall that in the [previous post](./offset/about_offset.md) we showed that
 transfer of funds between two nodes could be accomplished by "pushing" credit
 along a chain of friends.
 
@@ -53,7 +53,7 @@ greater benefit for `B` to keep the full 12 credits to himself and not pass any
 credits to `C`.
 
 We solve this problem using the idea of **backwards payment of credits**. This idea
-is crucial to the operation of payments in Offst.
+is crucial to the operation of payments in Offset.
 
 ## Introducing Backwards payment of credits
 
