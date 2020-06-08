@@ -14,6 +14,8 @@ highlight_theme = "monokai"
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
+generate_feed = true
+
 [extra]
 # Put all your custom variables here
 
