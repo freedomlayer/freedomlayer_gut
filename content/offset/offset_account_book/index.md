@@ -183,10 +183,10 @@ Some rules to remember:
 
 Essentially, the payment process can be summarized as two stages:
 
-1. A request is sent from the buyer to the seller, freezing the required
+1. A Request is sent from the buyer to the seller, freezing the required
    credits along the chain.
 
-2. A response is sent from the seller all the way back to the buyer, claiming
+2. A Response is sent from the seller all the way back to the buyer, claiming
    all the frozen credits.
 
 The core protocol gives the intermediate nodes along the chain an incentive to
