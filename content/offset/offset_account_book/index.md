@@ -89,117 +89,113 @@ a third party (Like a tax collecting entity) to somehow audit the account
 book, or even cross audit account books of different people that traded with
 each other [^1].
 
-
-# Intro to how Offset works
+# Core Offset protocol
 
 To better understand how to create a sound account book for Offset, some
 understanding about how Offset works is required. I will try to outline the
-main credit related parts, and elegantly abstract away all the technical
-details of low level communication, encryption etc.
+main credit related parts, abstracting away all the technical details of low
+level communication, encryption etc.
 
-The basic component of the Offset protocol is a **pair of friends**. Offset
-friends give certain amount of credit to each other. A relationship between two
-Offset friends is called mutual credit. Offset allows credits to be pushed
-along chains of friends, hence allowing trading without money.
+Offset allows trading on the basis of credit accounting. The basic component of
+the Offset protocol is a **pair of friends**. Offset friends give certain
+amount of credit to each other. A relationship between two Offset friends is
+called mutual credit. 
 
-TODO: Images of Bob paying to Dan through Charli.
+![Mutual credit between Bob and Charli](./bob_charli_mutual_2.svg)
 
-At its core, the **Offset protocol is made of three messages: Request, Response
-and Cancel**. Those messages are sent between Offset friends.
+Offset lets any user pay another user along of chain of friendships. This
+allows users to trade only using credit accounting, without using the
+traditional money systems. The following two images show an example for payment
+along a chain of Offset friendships, where Bob pays Dan through Charli.
 
-Assume that Bob's Offset node wants to send credits to Dan's Offset node,
-through Charli. Bob's node will first send a Request message. A request message
-contains a few fields. You can take a look here (From Offset v2):
+Status before payment:
 
-```rust
-pub struct RequestSendFundsOp {
-    /// Id number of this request. Used to identify the whole transaction
-    /// over this route.
-    pub request_id: Uid,
-    /// Currency used for this request
-    pub currency: Currency,
-    /// A hash lock created by the originator of this request
-    pub src_hashed_lock: HashedLock,
-    /// Amount paid to destination
-    pub dest_payment: u128,
-    /// hash(hash(actionId) || hash(totalDestPayment) || hash(description) || hash(additional))
-    pub invoice_hash: HashResult,
-    /// List of next nodes to transfer this request
-    pub route: Vec<PublicKey>,
-    /// Amount of fees left to give to mediators
-    /// Every mediator takes the amount of fees he wants and subtracts this
-    /// value accordingly.
-    pub left_fees: u128,
-}
-```
+![Bob before Dan through Charli](./bob_charli_daniel_mutual.svg)
 
-The only field important to us at this point is the `dest_payment`, which
-specifies the amount of credits Bob wants to push to Dan.
+Status after payment:
 
-When the Request message arrives to Charli, Charli makes sure that she has
-enough capacity to push this amount of credits along the mutual credit channel
-connecting Bob and Charli, and also on the mutual credit channel connecting
-Charli and Dan. If there is indeed enough capacity on both channels, Charli
-will freeze `dest_payment` credits on both channels, and forward the Request
-message to Bob. Otherwise, if there is not enough capacity at least on one of
-the mutual credit channels, Charli will return Bob a Cancel message, and Bob
-will conclude that the payment failed. 
+![Bob after paying Dan through Charli](./bob_charli_daniel_mutual_paid.svg)
 
-A Cancel message is pretty boring:
+If Offset was built using a single centralized database, invoking such chain
+transactions could have been trivial. However, Offset is a decentralized
+system, and the mutual credit between any two users is only saved on the
+devices of those two users. Therefore, performing a chain payment is a bit more
+tricky. For example, what can we do if some user along the chain decides to not
+forward the transaction, or maybe he becomes offline?
 
-```rust
-pub struct CancelSendFundsOp {
-    /// Id number of this request. Used to identify the whole transaction
-    /// over this route.
-    pub request_id: Uid,
-}
-```
+Offset attempts to solve this problem in a decentralized way using the core
+Offset protocol. At its core, the **Offset protocol is made of three messages:
+Request, Response and Cancel**. Those messages are sent between Offset friends.
 
-It only contains the `request_id` of the originally sent Request message.
+Let's revisit the payment drawn earlier, this time with finer details of the
+Offset protocol taking place:
 
-By freezing credits, we mean that Charli has saved a certain amount of credits
-that can not be used by any other transaction. Those credits wait frozen, until
-the transaction initiated by Bob is either done or cancelled.
+![Offset protocol payment along a chain](./mutual_credit_payment_success.svg)
 
-We continue with the transation initiated by Bob. If Charli had enough
-Capacity, her node will forward the Request message to Dan and freeze the
-corresponding credits on the mutual credit channel between Charli and Dan.
-Dan's node will also check that the mutual credit channel he has with Charli
-has enough capacity to receive the credits. If so, Dan will issue a Response
-message and send it back to Charli. 
 
-When Charli receives the Response message, it first checks if the Response
-message is valid. If the Response is indeed valid, Charli will unfreeze the credits
-with Dan, effectively transferring the credits to Dan. Next, Charli sends the
-Response message back to Bob. When Bob receives the Response message, it
-verifies its validity, and then unfreezes the credits it froze earlier,
-effectively transferring the credits to Charli.
+Order of events:
 
-This is what a Response message looks like:
+- Bob sends Charli a Request message.
+- Charli sends Dan a Request message.
+- Dan sends Charli a Response message.
+- Charli sends Bob a Response message.
 
-```rust
-pub struct ResponseSendFundsOp {
-    /// Id number of this request. Used to identify the whole transaction
-    /// over this route.
-    pub request_id: Uid,
-    pub src_plain_lock: PlainLock,
-    /// Serial number used for this collection of invoice money.
-    /// This should be a u128 counter, increased by 1 for every collected
-    /// invoice.
-    pub serial_num: u128,
-    /// Signature{key=destinationKey}(
-    ///   hash("FUNDS_RESPONSE") ||
-    ///   hash(request_id || src_plain_lock || dest_payment) ||
-    ///   hash(currency) ||
-    ///   serialNum ||
-    ///   invoiceHash)
-    /// )
-    pub signature: Signature,
-}
-```
+When a Request message is sent, credits are frozen in the mutual credit channel
+between the two parties. For example, when Bob sent Charli a Request message,
+the mutual credit channel between Bob and Charli has frozen 100 credits. Frozen
+credits can not be used. They are waiting for the transaction to be completed
+or cancelled. 
 
-A Request message contains a hash lock, created by Bob. Dan can only produce a
-corresponding Response message after Bob has given him the corresponding plain lock.
+When a Respnose message is sent, the corresponding frozen credits are released
+and transferred to the relevant party. For example, when Charli sent Bob the
+last Response message, the 100 frozen credits were unfrozen, and the balance
+between Bob and Charli changed to be +100 in favor of Charli.
+
+Frozen credits are created by sending a Request message. Frozen credits can
+only be unfrozen by:
+
+- Sending a Response message. In this case the unfrozen credits are transferred
+    to the party that received the original Request.
+- Sending a Cancel message. In this case the frozen credits are erased.
+
+Example for a Request being cancelled:
+
+![Offset protocol Cancel example](./mutual_credit_payment_cancel.svg)
+
+In the example above, Bob tried to send 170 credits all the way to Dan.
+However, the mutual credit between Bob and Charli did not have sufficient
+capcity (Because Charli has set up a credit limit of 150). Therefore instead of
+forwardin the Request to Dan, Charli sends back a Cancel message to Bob. This
+Cancel message has the effect of erasing the frozen credits. The balance
+between Bob and Charli is left unchaged, and Bob is notified that the
+transaction has failed.
+
+Some rules to remember:
+
+- Every Response or Cancel message must correspond to a previously sent Request
+ in the opposite direction. The correspondence is done using a `request_id`
+- It is not possible to return both a Response and Cancel messages for a
+    Request message. It must be exclusively one of Response or Cancel, but not
+    both.
+- Every Request message is expected to eventually be countered by a Response or
+    Cancel message. Otherwise, the credits are kept frozen and can not be used.
+
+
+Essentially, the payment process can be summarized as two stages:
+
+1. A request is sent from the buyer to the seller, freezing the required
+   credits along the chain.
+
+2. A response is sent from the seller all the way back to the buyer, claiming
+   all the frozen credits.
+
+The core protocol gives the intermediate nodes along the chain an incentive to
+forward the protocol messages. An intermediate node loses credits when he
+receives the Response message, and only earns back his credits when he keeps
+forwarding back the Response message.
+
+
+# Payments and Invoices
 
 
 [^1]: Offset will allow the user to produce an account book, but will never
