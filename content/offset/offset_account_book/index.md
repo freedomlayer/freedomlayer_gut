@@ -208,6 +208,138 @@ intermediate node). Hence, forwarding the protocol messages correctly aligns
 with the intermediate nodes along the chain to earn credits.
 
 
+# Generalized mutual credit
+
+We can now combine our previous discussion of balance and pending credits into
+one diagram:
+
+![Generalized mutual credit](./generalized_balance.svg)
+
+This diagram shows the point of view of one node in a mutual credit channel.
+The node keeps track of the current balance, and of all in-flight incoming and
+outgoing Request messages. 
+
+- For every outgoing (or forwarded) Request message, the local pending debt is increased. 
+- For every incoming Request message, the remote pending debt is increased. 
+- For every outgoing (or forwarded) Response message, the remote pending debt
+    is decreased, and the balance is increased.
+- For every incoming Response message, the local pending debt
+    is decreased, and the balance is decreased.
+
+Note that local pending debt can not be offset against remote pending debt,
+because both represent frozen credits of in-flight Request messages. 
+
+
+# Conflicts
+
+Every pair of Offset friends maintain a mutual credit channel, where both
+friends share an identical state, containing the current balance and in flight
+Requests between the two friends. The state is identical up to direction and
+sign, of course. For example, if one friend has a balance of +100, the other
+friend will have balance of -100.
+
+This is all fine in a nice theoretical world, but problems can, and probably
+will, occur. Here are some examples:
+
+1. One of the friends node's has a hardware issue, and his hard disk is damaged.
+2. One friend can buy lots of things, have a large debt, close his node and run away.
+3. One friend can maliciously change the internal state of his node, claiming
+    that he has more credit.
+
+To mitigate those issues, Offset uses two important mechanisms: Token Channel
+based communication, and Conflicts resolving protocol.
+
+## Token Channel
+
+Every pair of Offset friends maintain a mutual credit. The communication
+between two friends is done using a mechanism we call a Token Channel. A Token
+channel allows only one friend at at time to send a message to the other
+friend: the friend that holds the token. Whenever a message is sent, it
+transfers the token from one friend to the other, allowing the other friend to
+send a message. 
+
+This mechanism has a few roles, the one important to our discussion is the role
+of synchronization: The two friends can always agree on the order of messages
+sent. 
+
+This is how a message sent in a Token Channel looks like in Offset v2:
+
+```rust
+pub struct MoveToken {
+    pub old_token: Signature,
+    pub operations: Vec<FriendTcOp>,
+    pub new_token: Signature,
+}
+```
+
+`MoveToken` is mainly a container, that contains a batch of operations to be
+made. Every operation is either Request, Response or Cancel. We batch the
+operations together because of speed considerations. If we only sent one
+operation at a time, we would have to wait for a whole roundtrip until we get
+the token back.
+
+Besides the operations, there are two more fields: `old_token` and `new_token`.
+Those are cryptographic signatures over the state of mutual credit between the
+two parties. Here, `old_token` is the old signature, and `new_token` is a
+signature over a hash of the new state, and the previous `old_token`.
+
+What are those signatures for? Recall case (2) mentioned above. If one friend
+has a debt and runs away, the other friend can produce a digitally signed proof
+of the latest mutual credit state between the two friends. This proof can then
+be enforced using out of band means, for example, using a court.
+
+
+## Conflict resolving
+
+Conflicts resolve protocol is activated when two friends maintaining a mutual
+credit channel do not agree on the shared state. Conflicts should almost never
+happen, but they could, in cases like:
+
+- Hardware issue for one of the friend's nodes.
+- A friend maliciously changes his balance.
+
+A conflict occurs when a `MoveToken` message arrives with an invalid signature,
+or invalid contents. Some examples for invalid `MoveToken` contents:
+
+- A Request message attempts to freeze credits, causing more than 2^128 credits
+    to be frozen on the mutual credit channel.
+- Response message has invalid signature field or plain lock field.
+- Response or Cancel message has a `request_id` field that does not correspond
+    to any previously sent Request message.
+
+When any of the stated conditions is detected, a Conflict message is sent to
+the remote friend, containing the local friend's reset terms. The reset terms
+mostly contain the claimed balance for the mutual credit channel (and some
+other stuff that are less relevant here). When the remote friend receives the
+Conflict message, he also prepares his own reset terms and sends a
+corresponding Conflict message to his friend.
+
+At this stage, each of the friends can see the remote friend's reset terms, and
+can decide whether he wants to accept them. The two friends are expected at
+this point to communicate out of band (For example, by phone), try to find
+out the reason for the conflict, and discuss a way to resolve it.
+
+Whenever a friend accepts the remote friend's reset terms, the channel will be
+reset, and the new balances will match the accepted reset terms balance.
+
+There are a few more delicate details to be told about Offset conflicts. 
+I am going to ignore most of them here, except for one which is important to
+our consideration of account book: **We need to realize what happens to
+in-flight Requests during an Offset Conflict**. Let me provide an example.
+
+
+TODO:
+
+Consider the same Offset network configuration of Bob, Charli and Dan.
+Bob has sent a Request through Charli to Dan.
+
+```
+Bob -- Charli -- Dan
+```
+
+After the Request message arrived to Dan, a Conflict occured between 
+Charli and Dan.
+
 # Payments and Invoices
 
 The core Offset protocol described in the above section is underlying

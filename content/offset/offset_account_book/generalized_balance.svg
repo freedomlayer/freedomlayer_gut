@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="353.18192mm"
+   height="102.36517mm"
+   viewBox="0 0 353.18192 102.36517"
+   version="1.1"
+   id="svg7546"
+   inkscape:version="1.0.1 (0767f8302a, 2020-10-17)"
+   sodipodi:docname="generalized_balance.svg">
+  <style
+     id="style8109"></style>
+  <defs
+     id="defs7540">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker20190-9-1-3"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path20188-0-0-6"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         style="fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:#0000e4;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="785.32997"
+     inkscape:cy="320.34066"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     lock-margins="true"
+     fit-margin-top="8"
+     fit-margin-left="8"
+     fit-margin-right="8"
+     fit-margin-bottom="8"
+     inkscape:window-width="1916"
+     inkscape:window-height="1041"
+     inkscape:window-x="0"
+     inkscape:window-y="18"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7543">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(54.85376,-69.62679)">
+    <path
+       id="path10872"
+       d="M 3.8197261,119.21576 H 236.50603"
+       style="fill:none;stroke:#000000;stroke-width:1.26955;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       id="text25813"
+       y="139.92363"
+       x="105.90333"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583"
+         y="139.92363"
+         x="105.90333"
+         id="tspan25811"
+         sodipodi:role="line">0</tspan></text>
+    <path
+       id="path25815"
+       d="m 109.25011,128.31405 v -18.9194"
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       id="text26403"
+       y="125.86137"
+       x="29.065414"
+       style="font-size:21.1667px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583"
+         y="125.86137"
+         x="29.065414"
+         id="tspan26401"
+         sodipodi:role="line">[   </tspan></text>
+    <text
+       id="text26407"
+       y="125.86137"
+       x="193.10582"
+       style="font-size:21.1667px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583"
+         y="125.86137"
+         x="193.10582"
+         id="tspan26405"
+         sodipodi:role="line">]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:8.46667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="196.69379"
+       y="139.18066"
+       id="text25922-0"><tspan
+         sodipodi:role="line"
+         x="196.69379"
+         y="139.18066"
+         style="font-size:8.46667px;stroke-width:0.264583"
+         id="tspan8229">remote_max_debt</tspan></text>
+    <path
+       id="path25928-1-3-7"
+       d="M 133.81809,89.704773 V 103.19104"
+       style="fill:#0000ff;stroke:#0000e4;stroke-width:0.365001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker20190-9-1-3)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:8.46667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="-38.101742"
+       y="139.39352"
+       id="text25922-0-3"><tspan
+         sodipodi:role="line"
+         x="-38.101742"
+         y="139.39352"
+         style="font-size:8.46667px;stroke-width:0.264583"
+         id="tspan8251">- local_max_debt</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:8.46667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="118.49074"
+       y="85.350166"
+       id="text8257"><tspan
+         sodipodi:role="line"
+         id="tspan8255"
+         x="118.49074"
+         y="85.350166"
+         style="font-size:8.46667px;stroke-width:0.264583">balance</tspan></text>
+    <path
+       id="path25815-7"
+       d="m 133.81809,135.36822 v -30.0605"
+       style="fill:none;stroke:#000000;stroke-width:0.357729px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <rect
+       style="fill:#67d278;fill-opacity:1;stroke-width:0.593567;stroke-linecap:round;stroke-linejoin:round;paint-order:fill markers stroke"
+       id="rect8288"
+       width="38.076271"
+       height="11.889151"
+       x="134.20815"
+       y="113.29635" />
+    <rect
+       style="fill:#bf5858;fill-opacity:1;stroke-width:0.71729;stroke-linecap:round;stroke-linejoin:round;paint-order:fill markers stroke"
+       id="rect8288-3"
+       width="55.603973"
+       height="11.889151"
+       x="77.742157"
+       y="113.19184" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#bf5858;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="21.91235"
+       y="101.82229"
+       id="text25922-0-3-5"><tspan
+         sodipodi:role="line"
+         x="21.91235"
+         y="101.82229"
+         style="font-size:7.05556px;fill:#bf5858;fill-opacity:1;stroke-width:0.264583"
+         id="tspan8338">local_pending_debt</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05556px;line-height:1.25;font-family:sans-serif;fill:#67d278;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="170.65289"
+       y="101.49519"
+       id="text8344"><tspan
+         sodipodi:role="line"
+         id="tspan8342"
+         x="170.65289"
+         y="101.49519"
+         style="font-size:7.05556px;fill:#67d278;fill-opacity:1;stroke-width:0.264583">remote_pending_debt</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.203783px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 172.28442,113.29635 v 41.70357"
+       id="path8346" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="153.9277"
+       y="162.50188"
+       id="text25922-0-2"><tspan
+         sodipodi:role="line"
+         x="153.9277"
+         y="162.50188"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         id="tspan8229-9">balance + remote_pending_debt</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.203783px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 77.742157,113.19184 v 41.70357"
+       id="path8346-1" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:5.64444px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="11.619443"
+       y="162.66078"
+       id="text25922-0-2-2"><tspan
+         sodipodi:role="line"
+         x="11.619443"
+         y="162.66078"
+         style="font-size:5.64444px;stroke-width:0.264583"
+         id="tspan8229-9-7">balance - local_pending_debt</tspan></text>
+  </g>
+</svg>
