@@ -328,17 +328,12 @@ our consideration of account book: **We need to realize what happens to
 in-flight Requests during an Offset Conflict**. Let me provide an example.
 
 
-TODO:
-
 Consider the same Offset network configuration of Bob, Charli and Dan.
-Bob has sent a Request through Charli to Dan.
 
-```
-Bob -- Charli -- Dan
-```
+![Offset Conflict resolve example](./conflict.svg)
 
-After the Request message arrived to Dan, a Conflict occured between 
-Charli and Dan.
+TODO: Continue here.
+
 
 # Payments and Invoices
 
