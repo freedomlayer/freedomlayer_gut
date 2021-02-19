@@ -11,15 +11,15 @@ infrastructure allowing trading without money. Members can trade with each
 other on the basis of credit accounting. To save some energy for both the
 readers and me, Offset is not a blockchain, and it will not make you rich.
 
-I haven't updated here for a while. Recently a friend asked me what I was
-working on, and my reply was that I was having some problems with the design of
-the Offset account book. "Well, what's so difficult about designing a phone
-book?" was the immediate reaction. I tried to explain, but the best I could do
-in the 2 minutes I had was to mumble something about the fact that Offset is
-decentralized, transactions are asynchronous, things might get cancelled, etc. 
-Obviously this was not enough to convince my friend, but this got me thinking,
-maybe I need to write this all down, to get a better understanding myself of
-what is so difficult with designing Offset's account book.
+Recently a friend asked me what I was working on, and my reply was that I was
+having some problems with the design of the Offset account book. "Well, what's
+so difficult about designing a phone book?" was the immediate reaction. I tried
+to explain, but the best I could do in the 2 minutes I had was to mumble
+something about the fact that Offset is decentralized, transactions are
+asynchronous, things might get cancelled, etc.  Obviously this was not enough
+to convince my friend, but this got me thinking, maybe I need to write this all
+down, to get a better understanding myself of what is so difficult with
+designing Offset's account book.
 
 # Motivation
 
@@ -189,13 +189,56 @@ Essentially, the payment process can be summarized as two stages:
 2. A Response is sent from the seller all the way back to the buyer, claiming
    all the frozen credits.
 
-The core protocol gives the intermediate nodes along the chain an incentive to
-forward the protocol messages. An intermediate node loses credits when he
-receives the Response message, and only earns back his credits when he keeps
-forwarding back the Response message.
+
+Why are the credits collected only on the backwards Response message? Because
+this gives the intermediate nodes the correct incentives to make the protocol
+work.
+
+Imagine for a moment that we only used a single Request message to push the
+credits from the buyer to the seller. In this construction, a node along the
+chain could keep the credits and never forward the Request to the next node.
+
+In our construction, using Request and Response, this kind of attack is not
+possible. A node in the middle of the chain only freezes credits during the
+Request message phase. During the Response message phase, the intermediate node
+first pays credits to the next node in the chain (When Response message is
+received by the intermediate node), and only then receives more credits from
+the previous node in the chain (When Response message is sent to the previous
+intermediate node). Hence, forwarding the protocol messages correctly aligns
+with the intermediate nodes along the chain to earn credits.
 
 
 # Payments and Invoices
+
+The core Offset protocol described in the above section is underlying
+everything that happens in Offset. However, on its own it is too basic to allow
+what a usual user expects from a payments application. 
+
+Offset has an extra protocol layer that allows **Invoices and Payments**.
+Whenever an Offset seller wants to request a payment, he creates an Invoice and
+sends the Invoice to the buyer. The Invoice is sent out of band. The buyer then
+creates a corresponding Payment to pay the Invoice. A Payment can either
+succeed or fail. If the Payment succeeded, the buyer will get a signed receipt,
+proving that the payment occured.
+
+By saying **"out of band"**, I mean that the Offset network currently does not
+provide inherent means of communication to send this Invoice to the buyer, and
+you have to find your own way to do that. A few examples for sending an Invoice
+out of band:
+
+- Scanning a QR code 
+- Sharing a file
+- Sharing a link
+
+There will always be something out of band when you buy or sell things. For
+example, the goods will have to go out of band. When you visit the local
+grocery store and buy a bag of tomatoes, Offset will not be able to transfer
+the tomatoes for you. You will have to do it in the real physical world, out of
+band.
+
+To better understand the account book considerations, we need to go deeper to
+how Invoices and Payments actually work in Offset.
+
 
 
 [^1]: Offset will allow the user to produce an account book, but will never
