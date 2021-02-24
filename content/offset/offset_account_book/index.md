@@ -87,7 +87,11 @@ partial account book, for example, only beginning from a certain date.
 The other problem I would like the account book to solve is to somehow allow
 a third party (Like a tax collecting entity) to somehow audit the account
 book, or even cross audit account books of different people that traded with
-each other [^1].
+each other. 
+
+Finally, a note about privacy: Offset will allow the user to produce an account
+book, but will never send this account book anywhere without explicit user's
+request.
 
 # Core Offset protocol
 
@@ -377,7 +381,8 @@ The core Offset protocol described in the above section is underlying
 everything that happens in Offset. However, on its own it is too basic to allow
 what a usual user expects from a payments application. 
 
-Offset has an extra protocol layer that allows **Invoices and Payments**.
+Offset has an extra protocol layer that allows Invoices and Payments. In
+this document we call this protocol layer the **payments protocol**.
 Whenever an Offset seller wants to request a payment, he creates an Invoice and
 sends the Invoice to the buyer. The Invoice is sent out of band. The buyer then
 creates a corresponding Payment to pay the Invoice. A Payment can either
@@ -400,9 +405,32 @@ the tomatoes for you. You will have to do it in the real physical world, out of
 band.
 
 To better understand the account book considerations, we need to go deeper to
-how Invoices and Payments actually work in Offset.
+how Invoices and Payments actually work in Offset. 
+
+The following is an overview of the payment process:
+
+1. The seller sends the buyer an invoice (Out of band)
+2. The buyer sends multiple Requests through separate chains of friends. The
+   total of the credits pushed to the seller should sum up to the amount
+   specified inside the original invoice. All the requests are locked using the
+   same hash lock.
+3. The buyer reveals the plain lock to the seller. At this point the
+   payment is considered complete.
+4. Buyer receives the goods (Out of band)
+5. The seller sends corresponding Response-s for all sent Requests, effectively
+   collecting the credits.
+
+The following is a diagram demonstrating the main stages of payment. We omitted
+(1) and (4) which are done out of band:
+
+![Offset multi-route payment](./multiroute_payment.svg)
+
+In the above diagram, **blue** arrow represent messages sent using the core
+Offset protocol. **green** arrows represent messages sent using the **payments
+protocol**. Note that the plain lock sent from the buyer to the seller is sent
+along a relay, and not along a route of friends. This is done to provide a
+sense of atomicity to the payment.
 
 
+In our account book, we would like to mark the following 
 
-[^1]: Offset will allow the user to produce an account book, but will never
-  send this account book anywhere without explicit user's request.
