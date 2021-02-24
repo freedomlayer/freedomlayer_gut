@@ -375,14 +375,52 @@ diagram above to better understand the relationship between the two different
 balances.
 
 
-# Payments and Invoices
+# Fees
+
+Offset nodes that mediate payments might need incentives to do their work, for
+a few reasons:
+
+- Intermediate nodes take credit risk when they mediate transactions.
+- Processing Offset protocol messages requires resources:
+    - Live Internet connection,
+    - Certain computation ability
+    - Certain amount of hard disk space.
+
+The core Offset protocol provides nodes means of collecting fees in return for
+mediating Offset transactions through them. Every Request message, in addition
+to the amount of credits being paid, contains an extra field called
+`left_fees`. `left_fees` is being used like a jar of fees, given to the nodes
+along the chain.
+
+Every node can take as many credits that he wants from `left_fees`, update
+`left_fees` accordingly, and then forward the Request message to the next node.
+If a node receives a Request message with a too low `left_fees` value, he
+cancels the Request by sending back a Cancel message.
+
+How can the buyer of goods know how many fees credits he should leave to the
+intermediate nodes? Every node has the responsibility of updating some index
+server about his latest fees settings. Whenever a node asks for a chain from an
+index server, the index server provides a chain, taking into consideration the
+amount of fees that needs to added to the Request. The buyer can then decide
+whether or not he agrees to pay those fees. If not, the transaction will fail,
+or a different (cheaper) chain can be found to the seller.
+
+An important observation here is that an Offset node can earn credits by
+mediating other people's transactions.
+
+
+# Payments protocol
 
 The core Offset protocol described in the above section is underlying
 everything that happens in Offset. However, on its own it is too basic to allow
 what a usual user expects from a payments application. 
 
-Offset has an extra protocol layer that allows Invoices and Payments. In
-this document we call this protocol layer the **payments protocol**.
+Offset has an extra protocol layer that manages higher level structures:
+Invoices and Payments. In this document we call this protocol layer the
+**payments protocol**. The payments protocol works above the Offset core
+protocol, and it also requires some form of direct communication between the
+buyer and the seller.
+
 Whenever an Offset seller wants to request a payment, he creates an Invoice and
 sends the Invoice to the buyer. The Invoice is sent out of band. The buyer then
 creates a corresponding Payment to pay the Invoice. A Payment can either
@@ -409,7 +447,7 @@ how Invoices and Payments actually work in Offset.
 
 The following is an overview of the payment process:
 
-1. The seller sends the buyer an invoice (Out of band)
+1. The seller sends the buyer an Invoice (Out of band)
 2. The buyer sends multiple Requests through separate chains of friends. The
    total of the credits pushed to the seller should sum up to the amount
    specified inside the original invoice. All the requests are locked using the
@@ -427,10 +465,28 @@ The following is a diagram demonstrating the main stages of payment. We omitted
 
 In the above diagram, **blue** arrow represent messages sent using the core
 Offset protocol. **green** arrows represent messages sent using the **payments
-protocol**. Note that the plain lock sent from the buyer to the seller is sent
-along a relay, and not along a route of friends. This is done to provide a
-sense of atomicity to the payment.
+protocol**. Note that the plain lock sent from the buyer to the seller is
+sent along a relay, and not along a route of friends. This is done to provide a
+sense of atomicity to the payment. The 
+
+The events of selling (Invoice) or buying (Payment) are events that we would
+like to have in our account book.
 
 
-In our account book, we would like to mark the following 
+# Account book plan
+
+There are a few factors that effect an Offset node's balance along time:
+
+- Invoices (Incoming payments)
+- Payments (Outgoing payments)
+- fees
+- Friend events
+
+We already mentioned the first two (Invoices and Payments) in the previous
+section.
+
+TODO
+
+
+
 
