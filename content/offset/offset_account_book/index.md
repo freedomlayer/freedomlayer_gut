@@ -333,17 +333,17 @@ intermediate Offset nodes in this transaction.
 
 ![Offset Conflict resolve example](./conflict.svg)
 
-The Request arrives at Ellie, and somehow at that point in time Charli
-and Dan have a Conflict. Charli immediately cancels all in-flight Requests it
-has: In this example, it is only one Request, the Request sent from Bob to
-Ellie. Let's assume for example that:
+The Request arrives at Ellie, and right after Charli and Dan have a Conflict.
+Charli immediately cancels all in-flight Requests it has: In this example, it
+is only one Request, the Request sent from Bob to Ellie. Let's assume for
+example that:
 
 - Charli's reset terms are 0 balance (Also 0 from Dan's point of view).
 - Dan's reset terms are +100 balance (-100 from Charli's point of view).
 
 On Dan's side, the in-flight Request originally forwarded through Charli is
 considered an "orphan Request", because a Conflict occured. Dan later receives
-a Response from Ellie. Dan can can not propagate this Response to Charli.
+a Response from Ellie. Dan can not propagate this Response to Charli.
 Therefore, Dan lost 100 credits when he received the response from Ellie, but
 he could not recover his credits, due to the Conflict with Charli.
 
@@ -356,17 +356,19 @@ total balance is 0 (100 - 100). This means that Charli has lost credits because
 of the Conflict. If Dan had accepted Charli's reset terms, Dan would have lost
 credits due to this Conflict.
 
-
-TODO: Reformulate:
-
 This example shows an important phenomenon regarding Conflicts and in-flight
 Requests. When a Request is in progress and two friends have a Conflict:
 
 - The friend who sent the Request will speculate that the Request will fail.
-- The friend who received the Request will speculate that the Request succeed.
+- The friend who received the Request will speculate that the Request will succeed.
 
 
-TODO: Add image here.
+In other words, when a conflict occurs, a node will not propose `balance` as
+his reset terms. Instead, the node will propose `balance +
+remote_pending_debt`, speculating that all the `remote_pending_debt` will
+materialize into real credits in the future. See the generalized balance
+diagram above to better understand the relationship between the two different
+balances.
 
 
 # Payments and Invoices
